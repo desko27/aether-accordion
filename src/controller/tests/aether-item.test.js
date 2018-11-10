@@ -12,7 +12,7 @@ const defaultProperties = {
 
 describe("AetherItemController", () => {
   const validAetherItem = new AetherItemController(validArgs);
-  // let aetherItem;
+  let aetherItem;
 
   describe("has a constructor method that", () => {
     describe("sets the following properties when it receives valid arguments:", () => {
@@ -97,49 +97,131 @@ describe("AetherItemController", () => {
 
   describe("has a getId method that", () => {
     it("returns the id property", () =>
-      expect(validAetherItem.getId()).equals(validArgs.id));
+      expect(validAetherItem.getId()).to.equal(validArgs.id));
   });
 
   describe("has a getTitle method that", () => {
     it("returns the title property", () =>
-      expect(validAetherItem.getTitle()).equals(validArgs.title));
+      expect(validAetherItem.getTitle()).to.equal(validArgs.title));
   });
 
   describe("has a getDescription method that", () => {
     it("returns the description property", () =>
-      expect(validAetherItem.getDescription()).equals(validArgs.description));
+      expect(validAetherItem.getDescription()).to.equal(validArgs.description));
   });
 
   describe("has an isActive method that", () => {
     it("returns the active property", () =>
-      expect(validAetherItem.isActive()).equals(defaultProperties.active));
+      expect(validAetherItem.isActive()).to.equal(defaultProperties.active));
   });
 
   describe("has a setTitle method that", () => {
-    it("throws ArgumentMissingError when value is missing");
-    it("throws ArgumentTypeError when value is invalid");
-    it("sets received value as the title");
-    it("runs received function to set the returning value as the title");
-    it("received function is provided with the current value of title");
+    beforeEach(() => {
+      aetherItem = new AetherItemController(validArgs);
+    });
+
+    it("throws ArgumentMissingError when value is missing", () => {
+      expect(() => aetherItem.setTitle())
+        .to.throw()
+        .with.property("name", "ArgumentMissingError");
+    });
+    it("throws ArgumentTypeError when value is invalid", () => {
+      const invalidValues = [2751, -130, true, false, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => aetherItem.setTitle(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
+      });
+    });
+    it("sets received value as the title", () => {
+      aetherItem.setTitle("Valid title");
+      expect(aetherItem.title).to.equal("Valid title");
+    });
+    it("runs received function to set the returning value as the title", () => {
+      aetherItem.setTitle(() => "Valid title");
+      expect(aetherItem.title).to.equal("Valid title");
+    });
+    it("received function is provided with the current value of title", () => {
+      const anAetherItem = new AetherItemController({
+        ...validArgs,
+        title: "Valid title"
+      });
+      anAetherItem.setTitle(currentTitle => `${currentTitle}, of course`);
+      expect(anAetherItem.title).to.equal("Valid title, of course");
+    });
   });
 
   describe("has a setDescription method that", () => {
-    it("throws ArgumentMissingError when value is missing");
-    it("throws ArgumentTypeError when value is invalid");
-    it("sets received value as the description");
-    it("runs received function to set the returning value as the description");
-    it("received function is provided with the current value of description");
+    beforeEach(() => {
+      aetherItem = new AetherItemController(validArgs);
+    });
+
+    it("throws ArgumentMissingError when value is missing", () => {
+      expect(() => aetherItem.setDescription())
+        .to.throw()
+        .with.property("name", "ArgumentMissingError");
+    });
+    it("throws ArgumentTypeError when value is invalid", () => {
+      const invalidValues = [2751, -130, true, false, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => aetherItem.setDescription(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
+      });
+    });
+    it("sets received value as the description", () => {
+      aetherItem.setDescription("Valid description");
+      expect(aetherItem.description).to.equal("Valid description");
+    });
+    it("runs received function to set the returning value as the description", () => {
+      aetherItem.setDescription(() => "Valid description");
+      expect(aetherItem.description).to.equal("Valid description");
+    });
+    it("received function is provided with the current value of description", () => {
+      const anAetherItem = new AetherItemController({
+        ...validArgs,
+        description: "Valid description"
+      });
+      anAetherItem.setDescription(
+        currentDescription => `${currentDescription}, of course`
+      );
+      expect(anAetherItem.description).to.equal("Valid description, of course");
+    });
   });
 
   describe("has an activate method that", () => {
-    it("sets active property to true");
-    it("returns true if the property has been changed");
-    it("returns false if the property remains the same");
+    beforeEach(() => {
+      aetherItem = new AetherItemController(validArgs);
+    });
+
+    it("sets active property to true", () => {
+      aetherItem.active = false;
+      aetherItem.activate();
+      expect(aetherItem.active).to.equal(true);
+    });
+    it("returns true if the property has been changed", () => {
+      aetherItem.active = false;
+      expect(aetherItem.activate()).to.equal(true);
+    });
+    it("returns false if the property remains the same", () => {
+      aetherItem.active = true;
+      expect(aetherItem.activate()).to.equal(false);
+    });
   });
 
   describe("has a deactivate method that", () => {
-    it("sets active property to false");
-    it("returns true if the property has been changed");
-    it("returns false if the property remains the same");
+    it("sets active property to false", () => {
+      aetherItem.active = true;
+      aetherItem.deactivate();
+      expect(aetherItem.active).to.equal(false);
+    });
+    it("returns true if the property has been changed", () => {
+      aetherItem.active = true;
+      expect(aetherItem.deactivate()).to.equal(true);
+    });
+    it("returns false if the property remains the same", () => {
+      aetherItem.active = false;
+      expect(aetherItem.deactivate()).to.equal(false);
+    });
   });
 });

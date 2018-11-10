@@ -40,4 +40,42 @@ export default class AetherItemController {
   isActive() {
     return this.active;
   }
+
+  setTitle(value) {
+    if (value === undefined) throwArgumentMissingError("value");
+
+    const type = typeof value;
+    if (type !== "string" && type !== "function")
+      throwArgumentTypeError("value", value, "string or function");
+
+    // direct assignment
+    if (type === "string") this.title = value;
+    // assignment through a function
+    else this.title = value(this.title);
+  }
+
+  setDescription(value) {
+    if (value === undefined) throwArgumentMissingError("value");
+
+    const type = typeof value;
+    if (type !== "string" && type !== "function")
+      throwArgumentTypeError("value", value, "string or function");
+
+    // direct assignment
+    if (type === "string") this.description = value;
+    // assignment through a function
+    else this.description = value(this.description);
+  }
+
+  activate() {
+    const prev = this.active;
+    this.active = true;
+    return prev !== this.active;
+  }
+
+  deactivate() {
+    const prev = this.active;
+    this.active = false;
+    return prev !== this.active;
+  }
 }
