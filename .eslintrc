@@ -1,0 +1,7 @@
+{
+    "extends": [
+      "schibsted",
+      "schibsted/prettier-strict"
+    ],
+    "root": true
+}
