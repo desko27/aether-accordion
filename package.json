@@ -5,12 +5,21 @@
   "repository": "https://gitlab.com/desko27/aether-accordion.git",
   "author": "desko27 <desko27@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "eslint": "eslint --ext=\"js\" ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn eslint"
+    }
+  },
   "devDependencies": {
     "eslint": "^5.6.1",
     "eslint-config-schibsted": "^7.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-unicorn": "^6.0.1",
+    "husky": "^1.1.3",
     "prettier": "^1.14.3"
   }
 }
