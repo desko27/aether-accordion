@@ -114,4 +114,32 @@ describe("AetherItemController", () => {
     it("returns the active property", () =>
       expect(validAetherItem.isActive()).equals(defaultProperties.active));
   });
+
+  describe("has a setTitle method that", () => {
+    it("throws ArgumentMissingError when value is missing");
+    it("throws ArgumentTypeError when value is invalid");
+    it("sets received value as the title");
+    it("runs received function to set the returning value as the title");
+    it("received function is provided with the current value of title");
+  });
+
+  describe("has a setDescription method that", () => {
+    it("throws ArgumentMissingError when value is missing");
+    it("throws ArgumentTypeError when value is invalid");
+    it("sets received value as the description");
+    it("runs received function to set the returning value as the description");
+    it("received function is provided with the current value of description");
+  });
+
+  describe("has an activate method that", () => {
+    it("sets active property to true");
+    it("returns true if the property has been changed");
+    it("returns false if the property remains the same");
+  });
+
+  describe("has a deactivate method that", () => {
+    it("sets active property to false");
+    it("returns true if the property has been changed");
+    it("returns false if the property remains the same");
+  });
 });
