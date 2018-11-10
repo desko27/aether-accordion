@@ -22,5 +22,6 @@ export default class AetherItemController {
     this.id = id;
     this.title = title;
     this.description = description;
+    this.active = false;
   }
 }

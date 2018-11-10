@@ -17,15 +17,27 @@ describe("AetherItemController", () => {
 
       it("id", () => {
         expect(aetherItem.id).to.exist;
-        expect(aetherItem.id).to.be.a("number");
+        expect(aetherItem.id)
+          .to.be.a("number")
+          .that.equals(validArgs.id);
       });
       it("title", () => {
         expect(aetherItem.title).to.exist;
-        expect(aetherItem.title).to.be.a("string");
+        expect(aetherItem.title)
+          .to.be.a("string")
+          .that.equals(validArgs.title);
       });
       it("description", () => {
         expect(aetherItem.description).to.exist;
-        expect(aetherItem.description).to.be.a("string");
+        expect(aetherItem.description)
+          .to.be.a("string")
+          .that.equals(validArgs.description);
+      });
+      it("active", () => {
+        expect(aetherItem.active).to.exist;
+        expect(aetherItem.active)
+          .to.be.a("boolean")
+          .that.equals(false);
       });
     });
 
