@@ -45,5 +45,16 @@ describe("AetherAccordionController", () => {
         );
       });
     });
+
+    describe("throws ArgumentMissingError when", () => {
+      it("'entries' argument is missing", () => {
+        expect(
+          () =>
+            new AetherAccordionController({ ...validArgs, entries: undefined })
+        )
+          .to.throw()
+          .with.property("name", "ArgumentMissingError");
+      });
+    });
   });
 });
