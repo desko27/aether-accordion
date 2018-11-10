@@ -6,9 +6,13 @@ const validArgs = {
   description: "This is a full featured description."
 };
 
+const defaultProperties = {
+  active: false
+};
+
 describe("AetherItemController", () => {
-  let aetherItem;
   const validAetherItem = new AetherItemController(validArgs);
+  // let aetherItem;
 
   describe("has a constructor method that", () => {
     describe("sets the following properties when it receives valid arguments:", () => {
@@ -34,7 +38,7 @@ describe("AetherItemController", () => {
         expect(validAetherItem.active).to.exist;
         expect(validAetherItem.active)
           .to.be.a("boolean")
-          .that.equals(false);
+          .that.equals(defaultProperties.active);
       });
     });
 
@@ -92,10 +96,22 @@ describe("AetherItemController", () => {
   });
 
   describe("has a getId method that", () => {
-    before(() => {
-      aetherItem = new AetherItemController({ ...validArgs, id: 15 });
-    });
+    it("returns the id property", () =>
+      expect(validAetherItem.getId()).equals(validArgs.id));
+  });
 
-    it("returns the id property", () => expect(aetherItem.getId()).equals(15));
+  describe("has a getTitle method that", () => {
+    it("returns the title property", () =>
+      expect(validAetherItem.getTitle()).equals(validArgs.title));
+  });
+
+  describe("has a getDescription method that", () => {
+    it("returns the description property", () =>
+      expect(validAetherItem.getDescription()).equals(validArgs.description));
+  });
+
+  describe("has an isActive method that", () => {
+    it("returns the active property", () =>
+      expect(validAetherItem.isActive()).equals(defaultProperties.active));
   });
 });

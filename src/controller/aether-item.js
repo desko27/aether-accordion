@@ -28,4 +28,16 @@ export default class AetherItemController {
   getId() {
     return this.id;
   }
+
+  getTitle() {
+    return this.title;
+  }
+
+  getDescription() {
+    return this.description;
+  }
+
+  isActive() {
+    return this.active;
+  }
 }
