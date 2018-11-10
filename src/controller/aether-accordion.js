@@ -19,4 +19,28 @@ export default class AetherAccordionController {
     // settle other properties into the instance
     this.activeId = null;
   }
+
+  getActiveId() {
+    return this.activeId;
+  }
+
+  getEntry(id) {
+    if (id === undefined) throwMissingArgumentError("id");
+    if (!Number.isInteger(id) || (Number.isInteger(id) && id < 0))
+      throwArgumentTypeError("id", id, "positive integer");
+
+    const item = this.entries.find(entry => entry.id === id);
+    if (!item) return null;
+    return item;
+  }
+
+  getEntryTitle(id) {
+    const title = this.getEntry(id)?.getTitle();
+    return title || null;
+  }
+
+  getEntryDescription(id) {
+    const description = this.getEntry(id)?.getDescription();
+    return description || null;
+  }
 }

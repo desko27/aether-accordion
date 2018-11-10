@@ -56,53 +56,83 @@ describe("AetherAccordionController", () => {
           .with.property("name", "MissingArgumentError");
       });
     });
+  });
 
-    describe("has a getActiveId method that", () => {
-      it("returns the activeId property", () =>
-        expect(validAetherAccordion.getActiveId()).to.equal(
-          defaultProperties.activeId
-        ));
+  describe("has a getActiveId method that", () => {
+    it("returns the activeId property", () =>
+      expect(validAetherAccordion.getActiveId()).to.equal(
+        defaultProperties.activeId
+      ));
+  });
+
+  describe("has a getEntry method that", () => {
+    it("throws MissingArgumentError when id is missing", () => {
+      expect(() => validAetherAccordion.getEntry())
+        .to.throw()
+        .with.property("name", "MissingArgumentError");
     });
-
-    describe("has a getEntry method that", () => {
-      it("throws MissingArgumentError when id is missing", () => {
-        expect(() => validAetherAccordion.getEntry())
+    it("throws ArgumentTypeError when id is invalid", () => {
+      const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => validAetherAccordion.getEntry(value))
           .to.throw()
-          .with.property("name", "MissingArgumentError");
-      });
-      it("throws ArgumentTypeError when id is invalid", () => {
-        const invalidValues = ["not a number", -1, -253, true, null, [], {}];
-        invalidValues.forEach(value => {
-          expect(() => validAetherAccordion.getEntry(value))
-            .to.throw()
-            .with.property("name", "ArgumentTypeError");
-        });
-      });
-      it("returns null if no entry is found with provided id", () =>
-        expect(validAetherAccordion.getEntry(15)).to.be.null);
-      it("returns the specified entry if exists", () => {
-        expect(validAetherAccordion.getEntry(1)).to.deep.equal(
-          new AetherItemController(
-            validArgs.entries.find(entry => entry.id === 1)
-          )
-        );
+          .with.property("name", "ArgumentTypeError");
       });
     });
+    it("returns null if no entry is found with provided id", () =>
+      expect(validAetherAccordion.getEntry(15)).to.be.null);
+    it("returns the specified entry if exists", () => {
+      expect(validAetherAccordion.getEntry(1)).to.deep.equal(
+        new AetherItemController(
+          validArgs.entries.find(entry => entry.id === 1)
+        )
+      );
+    });
+  });
 
-    describe("has a getEntryTitle method that", () => {
-      it("returns the specified entry's title if entry exists", () => {
-        expect(validAetherAccordion.getEntryTitle(1)).to.equal(
-          validArgs.entries.find(entry => entry.id === 1).title
-        );
+  describe("has a getEntryTitle method that", () => {
+    it("throws MissingArgumentError when id is missing", () => {
+      expect(() => validAetherAccordion.getEntryTitle())
+        .to.throw()
+        .with.property("name", "MissingArgumentError");
+    });
+    it("throws ArgumentTypeError when id is invalid", () => {
+      const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => validAetherAccordion.getEntryTitle(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
       });
     });
+    it("returns null if no entry is found with provided id", () =>
+      expect(validAetherAccordion.getEntryTitle(15)).to.be.null);
+    it("returns the specified entry's title if entry exists", () => {
+      expect(validAetherAccordion.getEntryTitle(1)).to.equal(
+        validArgs.entries.find(entry => entry.id === 1).title
+      );
+    });
+  });
 
-    describe("has a getEntryDescription method that", () => {
-      it("returns the specified entry's description if entry exists", () => {
-        expect(validAetherAccordion.getEntryDescription(1)).to.equal(
-          validArgs.entries.find(entry => entry.id === 1).description
-        );
+  describe("has a getEntryDescription method that", () => {
+    it("throws MissingArgumentError when id is missing", () => {
+      expect(() => validAetherAccordion.getEntryDescription())
+        .to.throw()
+        .with.property("name", "MissingArgumentError");
+    });
+    it("throws ArgumentTypeError when id is invalid", () => {
+      const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => validAetherAccordion.getEntryDescription(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
       });
+    });
+    it("returns null if no entry is found with provided id", () =>
+      expect(validAetherAccordion.getEntryDescription(15)).to.be.null);
+    it("returns the specified entry's description if entry exists", () => {
+      expect(validAetherAccordion.getEntryDescription(1)).to.equal(
+        validArgs.entries.find(entry => entry.id === 1).description
+      );
     });
   });
 });
