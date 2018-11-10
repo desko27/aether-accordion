@@ -4,5 +4,6 @@
     "schibsted-modules",
     "schibsted/prettier-strict"
   ],
-  "root": true
+  "root": true,
+  "parser": "babel-eslint"
 }
