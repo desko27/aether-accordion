@@ -6,5 +6,12 @@
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-function-bind",
     "@babel/plugin-proposal-optional-chaining"
-  ]
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    }
+  }
 }
