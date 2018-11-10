@@ -1,14 +1,14 @@
 import {
-  throwArgumentMissingError,
+  throwMissingArgumentError,
   throwArgumentTypeError
 } from "../utils/error";
 
 export default class AetherItemController {
   constructor({ id, title, description } = {}) {
     // check for missing arguments
-    if (id === undefined) throwArgumentMissingError("id");
-    if (title === undefined) throwArgumentMissingError("title");
-    if (description === undefined) throwArgumentMissingError("description");
+    if (id === undefined) throwMissingArgumentError("id");
+    if (title === undefined) throwMissingArgumentError("title");
+    if (description === undefined) throwMissingArgumentError("description");
 
     // validate incoming arguments
     if (!Number.isInteger(id) || (Number.isInteger(id) && id < 0))
@@ -42,7 +42,7 @@ export default class AetherItemController {
   }
 
   setTitle(value) {
-    if (value === undefined) throwArgumentMissingError("value");
+    if (value === undefined) throwMissingArgumentError("value");
 
     const type = typeof value;
     if (type !== "string" && type !== "function")
@@ -55,7 +55,7 @@ export default class AetherItemController {
   }
 
   setDescription(value) {
-    if (value === undefined) throwArgumentMissingError("value");
+    if (value === undefined) throwMissingArgumentError("value");
 
     const type = typeof value;
     if (type !== "string" && type !== "function")

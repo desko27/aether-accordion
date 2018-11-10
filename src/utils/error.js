@@ -12,9 +12,9 @@ export function withType(type) {
 // CUSTOM THROWERS
 // ---
 
-export const throwArgumentMissingError = argument => {
+export const throwMissingArgumentError = argument => {
   const message = `Argument '${argument}' is missing.`;
-  throw new Error(message)::withType("ArgumentMissing");
+  throw new Error(message)::withType("MissingArgument");
 };
 
 export const throwArgumentTypeError = (argument, value, expectedType) => {

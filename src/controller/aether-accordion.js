@@ -1,5 +1,5 @@
 import {
-  throwArgumentMissingError,
+  throwMissingArgumentError,
   throwArgumentTypeError
 } from "../utils/error";
 import AetherItemController from "./aether-item";
@@ -7,7 +7,7 @@ import AetherItemController from "./aether-item";
 export default class AetherAccordionController {
   constructor({ entries } = {}) {
     // check for missing arguments
-    if (entries === undefined) throwArgumentMissingError("entries");
+    if (entries === undefined) throwMissingArgumentError("entries");
 
     // validate incoming arguments
     if (!Array.isArray(entries))

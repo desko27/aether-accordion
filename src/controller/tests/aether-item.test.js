@@ -42,18 +42,18 @@ describe("AetherItemController", () => {
       });
     });
 
-    describe("throws ArgumentMissingError when", () => {
+    describe("throws MissingArgumentError when", () => {
       it("'id' argument is missing", () => {
         expect(() => new AetherItemController({ ...validArgs, id: undefined }))
           .to.throw()
-          .with.property("name", "ArgumentMissingError");
+          .with.property("name", "MissingArgumentError");
       });
       it("'title' argument is missing", () => {
         expect(
           () => new AetherItemController({ ...validArgs, title: undefined })
         )
           .to.throw()
-          .with.property("name", "ArgumentMissingError");
+          .with.property("name", "MissingArgumentError");
       });
       it("'description' argument is missing", () => {
         expect(
@@ -61,7 +61,7 @@ describe("AetherItemController", () => {
             new AetherItemController({ ...validArgs, description: undefined })
         )
           .to.throw()
-          .with.property("name", "ArgumentMissingError");
+          .with.property("name", "MissingArgumentError");
       });
     });
 
@@ -120,10 +120,10 @@ describe("AetherItemController", () => {
       aetherItem = new AetherItemController(validArgs);
     });
 
-    it("throws ArgumentMissingError when value is missing", () => {
+    it("throws MissingArgumentError when value is missing", () => {
       expect(() => aetherItem.setTitle())
         .to.throw()
-        .with.property("name", "ArgumentMissingError");
+        .with.property("name", "MissingArgumentError");
     });
     it("throws ArgumentTypeError when value is invalid", () => {
       const invalidValues = [2751, -130, true, false, null, [], {}];
@@ -156,10 +156,10 @@ describe("AetherItemController", () => {
       aetherItem = new AetherItemController(validArgs);
     });
 
-    it("throws ArgumentMissingError when value is missing", () => {
+    it("throws MissingArgumentError when value is missing", () => {
       expect(() => aetherItem.setDescription())
         .to.throw()
-        .with.property("name", "ArgumentMissingError");
+        .with.property("name", "MissingArgumentError");
     });
     it("throws ArgumentTypeError when value is invalid", () => {
       const invalidValues = [2751, -130, true, false, null, [], {}];
