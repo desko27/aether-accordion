@@ -16,6 +16,7 @@
   "devDependencies": {
     "eslint": "^5.6.1",
     "eslint-config-schibsted": "^7.0.0",
+    "eslint-config-schibsted-modules": "^7.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-unicorn": "^6.0.1",

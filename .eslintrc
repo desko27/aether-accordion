@@ -1,7 +1,8 @@
 {
-    "extends": [
-      "schibsted",
-      "schibsted/prettier-strict"
-    ],
-    "root": true
+  "extends": [
+    "schibsted",
+    "schibsted-modules",
+    "schibsted/prettier-strict"
+  ],
+  "root": true
 }

@@ -327,6 +327,13 @@ eslint-config-prettier@^3.1.0:
   dependencies:
     get-stdin "^6.0.0"
 
+eslint-config-schibsted-modules@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-schibsted-modules/-/eslint-config-schibsted-modules-7.0.0.tgz#378438c289fb754f7614db1fe10c1a301fb9b97a"
+  integrity sha512-hkY1h182z1uowJTv0KL49qd2HkPdaLnAAVDLvw2gR188VsQO8Qz/hTtmNYvTUgpoyFvgNGd5y/VTL/1Quo7uQw==
+  dependencies:
+    eslint-config-airbnb-base "^13.1.0"
+
 eslint-config-schibsted@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/eslint-config-schibsted/-/eslint-config-schibsted-7.0.0.tgz#4d00aa611ea39eadc9f45cf8bc214c7ad5767193"
