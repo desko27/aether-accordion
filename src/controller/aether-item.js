@@ -24,4 +24,8 @@ export default class AetherItemController {
     this.description = description;
     this.active = false;
   }
+
+  getId() {
+    return this.id;
+  }
 }
