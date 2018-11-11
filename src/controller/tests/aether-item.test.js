@@ -136,6 +136,9 @@ describe("AetherItemController", () => {
         expect(() => aetherItem.setTitle(value))
           .to.throw()
           .with.property("name", "ArgumentTypeError");
+        expect(() => aetherItem.setTitle(() => value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
       });
     });
     it("sets received value as the title", () => {
@@ -170,6 +173,9 @@ describe("AetherItemController", () => {
       const invalidValues = [2751, -130, true, false, null, [], {}];
       invalidValues.forEach(value => {
         expect(() => aetherItem.setDescription(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
+        expect(() => aetherItem.setDescription(() => value))
           .to.throw()
           .with.property("name", "ArgumentTypeError");
       });
