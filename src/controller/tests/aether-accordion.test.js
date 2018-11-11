@@ -47,6 +47,11 @@ describe("AetherAccordionController", () => {
     });
 
     describe("throws MissingArgumentError when", () => {
+      it("all arguments are missing", () => {
+        expect(() => new AetherAccordionController())
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
       it("'entries' argument is missing", () => {
         expect(
           () =>
@@ -54,6 +59,20 @@ describe("AetherAccordionController", () => {
         )
           .to.throw()
           .with.property("name", "MissingArgumentError");
+      });
+    });
+
+    describe("throws ArgumentTypeError when", () => {
+      it("'entries' argument receives invalid values", () => {
+        const invalidValues = ["a string", 12, -253, true, null, {}];
+        invalidValues.forEach(value => {
+          expect(
+            () =>
+              new AetherAccordionController({ ...validArgs, entries: value })
+          )
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
       });
     });
   });

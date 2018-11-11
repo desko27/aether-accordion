@@ -43,6 +43,11 @@ describe("AetherItemController", () => {
     });
 
     describe("throws MissingArgumentError when", () => {
+      it("all arguments are missing", () => {
+        expect(() => new AetherItemController())
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
       it("'id' argument is missing", () => {
         expect(() => new AetherItemController({ ...validArgs, id: undefined }))
           .to.throw()
