@@ -64,7 +64,19 @@ describe("AetherAccordionController", () => {
 
     describe("throws ArgumentTypeError when", () => {
       it("'entries' argument receives invalid values", () => {
-        const invalidValues = ["a string", 12, -253, true, null, {}];
+        const invalidValues = [
+          "a string",
+          12,
+          -253,
+          true,
+          false,
+          null,
+          {},
+          [{ title: "valid title" }],
+          [{ title: "missing id", description: "valid description" }],
+          [{ id: 5, description: "missing title" }],
+          [{ id: "invalid id", title: "test", description: "missing title" }]
+        ];
         invalidValues.forEach(value => {
           expect(
             () =>
