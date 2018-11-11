@@ -211,6 +211,9 @@ describe("AetherAccordionController", () => {
           expect(() => aetherAccordion.setEntryTitle(0, value))
             .to.throw()
             .with.property("name", "ArgumentTypeError");
+          expect(() => aetherAccordion.setEntryTitle(0, () => value))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
         });
       });
     });
@@ -264,6 +267,9 @@ describe("AetherAccordionController", () => {
         const invalidValues = [2751, -130, true, false, null, [], {}];
         invalidValues.forEach(value => {
           expect(() => aetherAccordion.setEntryDescription(0, value))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+          expect(() => aetherAccordion.setEntryDescription(0, () => value))
             .to.throw()
             .with.property("name", "ArgumentTypeError");
         });
