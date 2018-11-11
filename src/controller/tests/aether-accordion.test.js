@@ -230,4 +230,61 @@ describe("AetherAccordionController", () => {
       ).to.equal(validTitle);
     });
   });
+
+  describe("has a setEntryDescription method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    describe("throws MissingArgumentError when", () => {
+      it("all arguments are missing", () => {
+        expect(() => aetherAccordion.setEntryDescription())
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+      it("second argument is missing", () => {
+        expect(() => aetherAccordion.setEntryDescription(0))
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+    });
+
+    describe("throws ArgumentTypeError when", () => {
+      it("'id' argument receives invalid values", () => {
+        const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+        invalidValues.forEach(value => {
+          expect(() =>
+            aetherAccordion.setEntryDescription(value, "Valid description")
+          )
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+      it("'value' argument receives invalid values", () => {
+        const invalidValues = [2751, -130, true, false, null, [], {}];
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.setEntryDescription(0, value))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+    });
+
+    it("returns false if no entry is found with provided id", () =>
+      expect(aetherAccordion.setEntryDescription(15, "Valid description")).to.be
+        .false);
+    it("returns true if entry is found and description is successfully updated", () =>
+      expect(aetherAccordion.setEntryDescription(0, "Valid description")).to.be
+        .true);
+
+    it("sets the description of the entry to the specified value", () => {
+      const targetId = 1;
+      const validDescription = "This description is valid";
+      aetherAccordion.setEntryDescription(targetId, validDescription);
+
+      expect(
+        aetherAccordion.entries.find(entry => entry.id === targetId).description
+      ).to.equal(validDescription);
+    });
+  });
 });

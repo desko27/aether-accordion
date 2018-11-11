@@ -62,4 +62,18 @@ export default class AetherAccordionController {
     entry.setTitle(value);
     return true;
   }
+
+  setEntryDescription(id, value) {
+    if (id === undefined) throwMissingArgumentError("id");
+    if (value === undefined) throwMissingArgumentError("value");
+
+    if (typeof value !== "string")
+      throwArgumentTypeError("value", value, "string");
+
+    const entry = this.getEntry(id);
+    if (!entry) return false;
+
+    entry.setDescription(value);
+    return true;
+  }
 }
