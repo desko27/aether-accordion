@@ -287,4 +287,66 @@ describe("AetherAccordionController", () => {
       ).to.equal(validDescription);
     });
   });
+
+  describe("has an activateEntry method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    it("throws MissingArgumentError when id is missing", () => {
+      expect(() => aetherAccordion.activateEntry())
+        .to.throw()
+        .with.property("name", "MissingArgumentError");
+    });
+    it("throws ArgumentTypeError when id is invalid", () => {
+      const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => aetherAccordion.activateEntry(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
+      });
+    });
+    it("returns false if no entry is found with provided id", () =>
+      expect(aetherAccordion.activateEntry(15)).to.be.false);
+    it("returns true if entry is found and it's successfully activated", () =>
+      expect(aetherAccordion.activateEntry(0)).to.be.true);
+    it("activates the specified entry if exists", () => {
+      const targetId = 1;
+      aetherAccordion.activateEntry(targetId);
+      expect(
+        aetherAccordion.entries.find(entry => entry.id === targetId).active
+      ).to.be.true;
+    });
+  });
+
+  describe("has an deactivateEntry method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    it("throws MissingArgumentError when id is missing", () => {
+      expect(() => aetherAccordion.deactivateEntry())
+        .to.throw()
+        .with.property("name", "MissingArgumentError");
+    });
+    it("throws ArgumentTypeError when id is invalid", () => {
+      const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => aetherAccordion.deactivateEntry(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
+      });
+    });
+    it("returns false if no entry is found with provided id", () =>
+      expect(aetherAccordion.deactivateEntry(15)).to.be.false);
+    it("returns true if entry is found and it's successfully deactivated", () =>
+      expect(aetherAccordion.deactivateEntry(0)).to.be.true);
+    it("deactivates the specified entry if exists", () => {
+      const targetId = 1;
+      aetherAccordion.deactivateEntry(targetId);
+      expect(
+        aetherAccordion.entries.find(entry => entry.id === targetId).active
+      ).to.be.false;
+    });
+  });
 });
