@@ -1,7 +1,6 @@
-import {
-  throwMissingArgumentError,
-  throwArgumentTypeError
-} from "../../utils/error";
+import { throwMissingArgumentError } from "../../utils/error";
+import { validateEntries } from "./aether-accordion.validations";
+import { validateId } from "../aether-item/aether-item.validations";
 import AetherItemController from "../aether-item";
 
 export default class AetherAccordionController {
@@ -10,8 +9,7 @@ export default class AetherAccordionController {
     if (entries === undefined) throwMissingArgumentError("entries");
 
     // validate incoming arguments
-    if (!Array.isArray(entries))
-      throwArgumentTypeError("entries", entries, "array");
+    validateEntries(entries);
 
     // parse entries' data into actual item controllers
     this.entries = entries.map(entry => new AetherItemController(entry));
@@ -31,8 +29,7 @@ export default class AetherAccordionController {
 
   getEntry(id) {
     if (id === undefined) throwMissingArgumentError("id");
-    if (!Number.isInteger(id) || (Number.isInteger(id) && id < 0))
-      throwArgumentTypeError("id", id, "positive integer");
+    validateId(id);
 
     const item = this.entries.find(entry => entry.id === id);
     if (!item) return null;
@@ -53,9 +50,6 @@ export default class AetherAccordionController {
     if (id === undefined) throwMissingArgumentError("id");
     if (value === undefined) throwMissingArgumentError("value");
 
-    if (typeof value !== "string")
-      throwArgumentTypeError("value", value, "string");
-
     const entry = this.getEntry(id);
     if (!entry) return false;
 
@@ -66,9 +60,6 @@ export default class AetherAccordionController {
   setEntryDescription(id, value) {
     if (id === undefined) throwMissingArgumentError("id");
     if (value === undefined) throwMissingArgumentError("value");
-
-    if (typeof value !== "string")
-      throwArgumentTypeError("value", value, "string");
 
     const entry = this.getEntry(id);
     if (!entry) return false;

@@ -2,6 +2,11 @@ import {
   throwMissingArgumentError,
   throwArgumentTypeError
 } from "../../utils/error";
+import {
+  validateId,
+  validateTitle,
+  validateDescription
+} from "./aether-item.validations";
 
 export default class AetherItemController {
   constructor({ id, title, description } = {}) {
@@ -11,12 +16,9 @@ export default class AetherItemController {
     if (description === undefined) throwMissingArgumentError("description");
 
     // validate incoming arguments
-    if (!Number.isInteger(id) || (Number.isInteger(id) && id < 0))
-      throwArgumentTypeError("id", id, "positive integer");
-    if (typeof title !== "string")
-      throwArgumentTypeError("title", title, "string");
-    if (typeof description !== "string")
-      throwArgumentTypeError("description", description, "string");
+    validateId(id);
+    validateTitle(title);
+    validateDescription(description);
 
     // settle properties into the instance
     this.id = id;
@@ -49,9 +51,16 @@ export default class AetherItemController {
       throwArgumentTypeError("value", value, "string or function");
 
     // direct assignment
-    if (type === "string") this.title = value;
+    if (type === "string") {
+      validateTitle(value);
+      this.title = value;
+    }
     // assignment through a function
-    else this.title = value(this.title);
+    else {
+      const result = value(this.title);
+      validateTitle(result);
+      this.title = result;
+    }
   }
 
   setDescription(value) {
@@ -62,9 +71,16 @@ export default class AetherItemController {
       throwArgumentTypeError("value", value, "string or function");
 
     // direct assignment
-    if (type === "string") this.description = value;
+    if (type === "string") {
+      validateDescription(value);
+      this.description = value;
+    }
     // assignment through a function
-    else this.description = value(this.description);
+    else {
+      const result = value(this.description);
+      validateDescription(result);
+      this.description = result;
+    }
   }
 
   activate() {
