@@ -21,6 +21,12 @@ const validArgs = {
   ]
 };
 
+const validEntry = {
+  id: 3,
+  title: "Section #4",
+  description: "Section #4 contents..."
+};
+
 const defaultProperties = {
   activeId: null
 };
@@ -64,6 +70,9 @@ describe("AetherAccordionController", () => {
 
     describe("throws ArgumentTypeError when", () => {
       it("'entries' argument receives invalid values", () => {
+        const { title, ...entryWithoutTitle } = validEntry;
+        const { description, ...entryWithoutDescription } = validEntry;
+        const { id, ...entryWithoutId } = validEntry;
         const invalidValues = [
           "a string",
           12,
@@ -72,10 +81,10 @@ describe("AetherAccordionController", () => {
           false,
           null,
           {},
-          [{ title: "valid title" }],
-          [{ title: "missing id", description: "valid description" }],
-          [{ id: 5, description: "missing title" }],
-          [{ id: "invalid id", title: "test", description: "missing title" }]
+          [entryWithoutTitle],
+          [entryWithoutDescription],
+          [entryWithoutId],
+          [{ ...validEntry, id: "invalid id" }]
         ];
         invalidValues.forEach(value => {
           expect(
@@ -86,6 +95,23 @@ describe("AetherAccordionController", () => {
             .with.property("name", "ArgumentTypeError");
         });
       });
+    });
+
+    describe("throws ExistingIdError when", () => {
+      it("'entries' argument receives duplicated ids", () => {
+        const entries = [...validArgs.entries, { ...validEntry, id: 1 }];
+        expect(() => new AetherAccordionController({ ...validArgs, entries }))
+          .to.throw()
+          .with.property("name", "ExistingIdError");
+      });
+    });
+  });
+
+  describe("has a getEntries method that", () => {
+    it("returns the entries property", () => {
+      expect(validAetherAccordion.getEntries()).to.deep.equals(
+        validArgs.entries.map(entry => new AetherItemController(entry))
+      );
     });
   });
 
@@ -337,7 +363,7 @@ describe("AetherAccordionController", () => {
     });
   });
 
-  describe("has an deactivateEntry method that", () => {
+  describe("has a deactivateEntry method that", () => {
     beforeEach(() => {
       aetherAccordion = new AetherAccordionController(validArgs);
     });
@@ -365,6 +391,95 @@ describe("AetherAccordionController", () => {
       expect(
         aetherAccordion.entries.find(entry => entry.id === targetId).active
       ).to.be.false;
+    });
+  });
+
+  describe("has an insertEntryBefore method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    describe("throws MissingArgumentError when", () => {
+      it("all arguments are missing", () => {
+        expect(() => aetherAccordion.insertEntryBefore())
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+      it("second argument is missing", () => {
+        expect(() => aetherAccordion.insertEntryBefore(2))
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+    });
+
+    describe("throws ArgumentTypeError when", () => {
+      it("'id' argument receives invalid values", () => {
+        const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.insertEntryBefore(value, validEntry))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+      it("'entry' argument receives invalid values", () => {
+        const { title, ...entryWithoutTitle } = validEntry;
+        const { description, ...entryWithoutDescription } = validEntry;
+        const { id, ...entryWithoutId } = validEntry;
+        const invalidValues = [
+          "a string",
+          12,
+          -253,
+          true,
+          false,
+          null,
+          {},
+          entryWithoutTitle,
+          entryWithoutDescription,
+          entryWithoutId,
+          { ...validEntry, id: "invalid id" }
+        ];
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.insertEntryBefore(1, value))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+    });
+
+    describe("throws ExistingIdError when", () => {
+      it("'entry' argument receives an existing id", () => {
+        expect(() =>
+          aetherAccordion.insertEntryBefore(1, { ...validEntry, id: 1 })
+        )
+          .to.throw()
+          .with.property("name", "ExistingIdError");
+      });
+    });
+
+    describe("throws IndexOutOfBoundsError when", () => {
+      it("the target id is the first element on the array", () => {
+        expect(() => aetherAccordion.insertEntryBefore(0, validEntry))
+          .to.throw()
+          .with.property("name", "IndexOutOfBoundsError");
+      });
+    });
+
+    it("returns false if no entry is found with provided id", () =>
+      expect(aetherAccordion.insertEntryBefore(15, validEntry)).to.be.false);
+    it("returns true if entry is found and entries are successfully updated", () =>
+      expect(aetherAccordion.insertEntryBefore(1, validEntry)).to.be.true);
+
+    it("inserts an entry into entries array before the specified entry id", () => {
+      const targetId = 1;
+      aetherAccordion.insertEntryBefore(targetId, validEntry);
+
+      const targetIndex = aetherAccordion.entries.findIndex(
+        entry => entry.id === targetId
+      );
+
+      expect(aetherAccordion.entries[targetIndex - 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      );
     });
   });
 });

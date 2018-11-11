@@ -1,21 +1,25 @@
-import { throwMissingArgumentError } from "../../utils/error";
-import { validateEntries } from "./aether-accordion.validations";
+import {
+  throwMissingArgumentError,
+  throwIndexOutOfBoundsError,
+  throwExistingIdError
+} from "../../utils/error";
+import { validateEntries, validateEntry } from "./aether-accordion.validations";
 import { validateId } from "../aether-item/aether-item.validations";
-import AetherItemController from "../aether-item";
 
 export default class AetherAccordionController {
   constructor({ entries, activeId = null } = {}) {
     // check for missing arguments
     if (entries === undefined) throwMissingArgumentError("entries");
 
-    // validate incoming arguments
-    validateEntries(entries);
-
-    // parse entries' data into actual item controllers
-    this.entries = entries.map(entry => new AetherItemController(entry));
+    // validate entries and parse them into actual item controllers
+    this.entries = validateEntries(entries);
 
     // settle other properties into the instance
     this.activeId = activeId;
+  }
+
+  getEntries() {
+    return this.entries;
   }
 
   getActiveId() {
@@ -85,6 +89,24 @@ export default class AetherAccordionController {
     if (!entry) return false;
 
     entry.deactivate();
+    return true;
+  }
+
+  insertEntryBefore(id, entry) {
+    if (id === undefined) throwMissingArgumentError("id");
+    if (entry === undefined) throwMissingArgumentError("entry");
+
+    validateId(id);
+    const newEntry = validateEntry(entry);
+
+    if (this.entries.find(e => e.id === entry.id))
+      throwExistingIdError(entry.id);
+
+    const targetIndex = this.entries.findIndex(e => e.id === id);
+    if (targetIndex === -1) return false;
+
+    if (targetIndex === 0) throwIndexOutOfBoundsError();
+    this.entries.splice(targetIndex, 0, newEntry);
     return true;
   }
 }
