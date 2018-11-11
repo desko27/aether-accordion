@@ -5,7 +5,7 @@ import {
 import AetherItemController from "./aether-item";
 
 export default class AetherAccordionController {
-  constructor({ entries } = {}) {
+  constructor({ entries, activeId = null } = {}) {
     // check for missing arguments
     if (entries === undefined) throwMissingArgumentError("entries");
 
@@ -17,11 +17,16 @@ export default class AetherAccordionController {
     this.entries = entries.map(entry => new AetherItemController(entry));
 
     // settle other properties into the instance
-    this.activeId = null;
+    this.activeId = activeId;
   }
 
   getActiveId() {
     return this.activeId;
+  }
+
+  getActive() {
+    if (this.activeId) return this.getEntry(this.activeId);
+    return null;
   }
 
   getEntry(id) {
@@ -42,5 +47,19 @@ export default class AetherAccordionController {
   getEntryDescription(id) {
     const description = this.getEntry(id)?.getDescription();
     return description || null;
+  }
+
+  setEntryTitle(id, value) {
+    if (id === undefined) throwMissingArgumentError("id");
+    if (value === undefined) throwMissingArgumentError("value");
+
+    if (typeof value !== "string")
+      throwArgumentTypeError("value", value, "string");
+
+    const entry = this.getEntry(id);
+    if (!entry) return false;
+
+    entry.setTitle(value);
+    return true;
   }
 }

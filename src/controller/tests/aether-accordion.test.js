@@ -27,7 +27,7 @@ const defaultProperties = {
 
 describe("AetherAccordionController", () => {
   const validAetherAccordion = new AetherAccordionController(validArgs);
-  // let aetherAccordion;
+  let aetherAccordion;
 
   describe("has a constructor method that", () => {
     describe("sets the following properties when it receives valid arguments:", () => {
@@ -78,10 +78,33 @@ describe("AetherAccordionController", () => {
   });
 
   describe("has a getActiveId method that", () => {
-    it("returns the activeId property", () =>
+    it("returns the activeId property", () => {
       expect(validAetherAccordion.getActiveId()).to.equal(
         defaultProperties.activeId
-      ));
+      );
+    });
+  });
+
+  describe("has a getActive method that", () => {
+    it("returns null if no entry is active", () => {
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        activeId: null
+      });
+      expect(aetherAccordion.getActive()).to.be.null;
+    });
+    it("returns the active entry", () => {
+      const targetId = 2;
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        activeId: targetId
+      });
+      expect(aetherAccordion.getActive()).to.deep.equal(
+        new AetherItemController(
+          validArgs.entries.find(entry => entry.id === targetId)
+        )
+      );
+    });
   });
 
   describe("has a getEntry method that", () => {
@@ -152,6 +175,59 @@ describe("AetherAccordionController", () => {
       expect(validAetherAccordion.getEntryDescription(1)).to.equal(
         validArgs.entries.find(entry => entry.id === 1).description
       );
+    });
+  });
+
+  describe("has a setEntryTitle method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    describe("throws MissingArgumentError when", () => {
+      it("all arguments are missing", () => {
+        expect(() => aetherAccordion.setEntryTitle())
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+      it("second argument is missing", () => {
+        expect(() => aetherAccordion.setEntryTitle(0))
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+    });
+
+    describe("throws ArgumentTypeError when", () => {
+      it("'id' argument receives invalid values", () => {
+        const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.setEntryTitle(value, "Valid title"))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+      it("'value' argument receives invalid values", () => {
+        const invalidValues = [2751, -130, true, false, null, [], {}];
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.setEntryTitle(0, value))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+    });
+
+    it("returns false if no entry is found with provided id", () =>
+      expect(aetherAccordion.setEntryTitle(15, "Valid title")).to.be.false);
+    it("returns true if entry is found and title is successfully updated", () =>
+      expect(aetherAccordion.setEntryTitle(0, "Valid title")).to.be.true);
+
+    it("sets the title of the entry to the specified value", () => {
+      const targetId = 1;
+      const validTitle = "This title is valid";
+      aetherAccordion.setEntryTitle(targetId, validTitle);
+
+      expect(
+        aetherAccordion.entries.find(entry => entry.id === targetId).title
+      ).to.equal(validTitle);
     });
   });
 });
