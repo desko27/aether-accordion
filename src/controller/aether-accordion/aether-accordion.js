@@ -1,8 +1,8 @@
 import {
   throwMissingArgumentError,
   throwArgumentTypeError
-} from "../utils/error";
-import AetherItemController from "./aether-item";
+} from "../../utils/error";
+import AetherItemController from "../aether-item";
 
 export default class AetherAccordionController {
   constructor({ entries, activeId = null } = {}) {

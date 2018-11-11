@@ -1,7 +1,7 @@
 import {
   throwMissingArgumentError,
   throwArgumentTypeError
-} from "../utils/error";
+} from "../../utils/error";
 
 export default class AetherItemController {
   constructor({ id, title, description } = {}) {
