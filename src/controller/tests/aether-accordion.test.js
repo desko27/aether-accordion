@@ -1,5 +1,6 @@
 import AetherAccordionController from "../aether-accordion";
 import AetherItemController from "../aether-item";
+import { validateEntry } from "../aether-accordion/aether-accordion.validations";
 
 const validArgs = {
   entries: [
@@ -103,6 +104,19 @@ describe("AetherAccordionController", () => {
         expect(() => new AetherAccordionController({ ...validArgs, entries }))
           .to.throw()
           .with.property("name", "ExistingIdError");
+      });
+    });
+
+    describe("throws up any other error when", () => {
+      it("an unknown error is caught by the entry validator", () => {
+        const AetherItemStub = sinon
+          .stub(AetherItemController, "constructor")
+          .throws(new Error("Unknown error"));
+
+        expect(() => validateEntry(validEntry, AetherItemStub)).to.throw(
+          "Unknown error"
+        );
+        AetherItemStub.reset();
       });
     });
   });

@@ -15,6 +15,7 @@
     ]
   },
   "globals": {
-    "expect": false
+    "expect": false,
+    "sinon": false
   }
 }

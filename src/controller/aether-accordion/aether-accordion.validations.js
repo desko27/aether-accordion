@@ -4,9 +4,9 @@ import {
 } from "../../utils/error";
 import AetherItemController from "../aether-item";
 
-export const validateEntry = entry => {
+export const validateEntry = (entry, ItemController = AetherItemController) => {
   try {
-    return new AetherItemController(entry);
+    return new ItemController(entry);
   } catch (error) {
     const { name } = error;
     if (
