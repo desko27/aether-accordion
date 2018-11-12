@@ -29,8 +29,3 @@ export const throwExistingIdError = id => {
   const message = `ID '${id}' already exists.`;
   throw new Error(message)::withType("ExistingId");
 };
-
-export const throwIndexOutOfBoundsError = index => {
-  const message = `Index ${index} is out of bounds.`;
-  throw new Error(message)::withType("IndexOutOfBounds");
-};

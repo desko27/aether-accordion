@@ -469,14 +469,6 @@ describe("AetherAccordionController", () => {
       });
     });
 
-    describe("throws IndexOutOfBoundsError when", () => {
-      it("the target id is the first element on the array", () => {
-        expect(() => aetherAccordion.insertEntryBefore(0, validEntry))
-          .to.throw()
-          .with.property("name", "IndexOutOfBoundsError");
-      });
-    });
-
     it("returns false if no entry is found with provided id", () =>
       expect(aetherAccordion.insertEntryBefore(15, validEntry)).to.be.false);
     it("returns true if entry is found and entries are successfully updated", () =>
@@ -490,6 +482,20 @@ describe("AetherAccordionController", () => {
         entry => entry.id === targetId
       );
 
+      expect(aetherAccordion.entries[targetIndex - 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      );
+    });
+
+    it("inserts an entry into entries array before the first entry id", () => {
+      const firstId = 0;
+      aetherAccordion.insertEntryBefore(firstId, validEntry);
+
+      const targetIndex = aetherAccordion.entries.findIndex(
+        entry => entry.id === firstId
+      );
+
+      expect(targetIndex - 1).to.equal(0);
       expect(aetherAccordion.entries[targetIndex - 1]).to.deep.equal(
         new AetherItemController(validEntry)
       );
@@ -558,15 +564,6 @@ describe("AetherAccordionController", () => {
       });
     });
 
-    describe("throws IndexOutOfBoundsError when", () => {
-      it("the target id is the last element on the array", () => {
-        const [{ id: lastId }] = [...aetherAccordion.entries].reverse();
-        expect(() => aetherAccordion.insertEntryAfter(lastId, validEntry))
-          .to.throw()
-          .with.property("name", "IndexOutOfBoundsError");
-      });
-    });
-
     it("returns false if no entry is found with provided id", () =>
       expect(aetherAccordion.insertEntryAfter(15, validEntry)).to.be.false);
     it("returns true if entry is found and entries are successfully updated", () =>
@@ -580,6 +577,20 @@ describe("AetherAccordionController", () => {
         entry => entry.id === targetId
       );
 
+      expect(aetherAccordion.entries[targetIndex + 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      );
+    });
+
+    it("inserts an entry into entries array after the last entry id", () => {
+      const [{ id: lastId }] = [...aetherAccordion.entries].reverse();
+      aetherAccordion.insertEntryAfter(lastId, validEntry);
+
+      const targetIndex = aetherAccordion.entries.findIndex(
+        entry => entry.id === lastId
+      );
+
+      expect(targetIndex + 1).to.equal(aetherAccordion.entries.length - 1);
       expect(aetherAccordion.entries[targetIndex + 1]).to.deep.equal(
         new AetherItemController(validEntry)
       );

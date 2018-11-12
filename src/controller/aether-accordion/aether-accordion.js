@@ -1,6 +1,5 @@
 import {
   throwMissingArgumentError,
-  throwIndexOutOfBoundsError,
   throwExistingIdError
 } from "../../utils/error";
 import { validateEntries, validateEntry } from "./aether-accordion.validations";
@@ -105,7 +104,6 @@ export default class AetherAccordionController {
     const targetIndex = this.entries.findIndex(e => e.id === id);
     if (targetIndex === -1) return false;
 
-    if (targetIndex === 0) throwIndexOutOfBoundsError();
     this.entries.splice(targetIndex, 0, newEntry);
     return true;
   }
@@ -123,7 +121,6 @@ export default class AetherAccordionController {
     const targetIndex = this.entries.findIndex(e => e.id === id);
     if (targetIndex === -1) return false;
 
-    if (targetIndex === this.entries.length - 1) throwIndexOutOfBoundsError();
     this.entries.splice(targetIndex + 1, 0, newEntry);
     return true;
   }
