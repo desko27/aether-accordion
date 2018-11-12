@@ -116,7 +116,6 @@ describe("AetherAccordionController", () => {
         expect(() => validateEntry(validEntry, AetherItemStub)).to.throw(
           "Unknown error"
         );
-        AetherItemStub.reset();
       });
     });
   });
