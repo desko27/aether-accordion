@@ -596,4 +596,44 @@ describe("AetherAccordionController", () => {
       );
     });
   });
+
+  describe("has an prependEntry method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    it("inserts an entry into entries array before the first entry id", () => {
+      const firstId = 0;
+      aetherAccordion.prependEntry(validEntry);
+
+      const targetIndex = aetherAccordion.entries.findIndex(
+        entry => entry.id === firstId
+      );
+
+      expect(targetIndex - 1).to.equal(0);
+      expect(aetherAccordion.entries[targetIndex - 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      );
+    });
+  });
+
+  describe("has an appendEntry method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    it("inserts an entry into entries array after the last entry id", () => {
+      const [{ id: lastId }] = [...aetherAccordion.entries].reverse();
+      aetherAccordion.appendEntry(validEntry);
+
+      const targetIndex = aetherAccordion.entries.findIndex(
+        entry => entry.id === lastId
+      );
+
+      expect(targetIndex + 1).to.equal(aetherAccordion.entries.length - 1);
+      expect(aetherAccordion.entries[targetIndex + 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      );
+    });
+  });
 });

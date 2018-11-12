@@ -124,4 +124,14 @@ export default class AetherAccordionController {
     this.entries.splice(targetIndex + 1, 0, newEntry);
     return true;
   }
+
+  prependEntry(entry) {
+    const firstId = 0;
+    return this.insertEntryBefore(firstId, entry);
+  }
+
+  appendEntry(entry) {
+    const [{ id: lastId }] = [...this.entries].reverse();
+    return this.insertEntryAfter(lastId, entry);
+  }
 }
