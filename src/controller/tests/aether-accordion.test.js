@@ -495,4 +495,94 @@ describe("AetherAccordionController", () => {
       );
     });
   });
+
+  describe("has an insertEntryAfter method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    describe("throws MissingArgumentError when", () => {
+      it("all arguments are missing", () => {
+        expect(() => aetherAccordion.insertEntryAfter())
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+      it("second argument is missing", () => {
+        expect(() => aetherAccordion.insertEntryAfter(2))
+          .to.throw()
+          .with.property("name", "MissingArgumentError");
+      });
+    });
+
+    describe("throws ArgumentTypeError when", () => {
+      it("'id' argument receives invalid values", () => {
+        const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.insertEntryAfter(value, validEntry))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+      it("'entry' argument receives invalid values", () => {
+        const { title, ...entryWithoutTitle } = validEntry;
+        const { description, ...entryWithoutDescription } = validEntry;
+        const { id, ...entryWithoutId } = validEntry;
+        const invalidValues = [
+          "a string",
+          12,
+          -253,
+          true,
+          false,
+          null,
+          {},
+          entryWithoutTitle,
+          entryWithoutDescription,
+          entryWithoutId,
+          { ...validEntry, id: "invalid id" }
+        ];
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.insertEntryAfter(1, value))
+            .to.throw()
+            .with.property("name", "ArgumentTypeError");
+        });
+      });
+    });
+
+    describe("throws ExistingIdError when", () => {
+      it("'entry' argument receives an existing id", () => {
+        expect(() =>
+          aetherAccordion.insertEntryAfter(1, { ...validEntry, id: 1 })
+        )
+          .to.throw()
+          .with.property("name", "ExistingIdError");
+      });
+    });
+
+    describe("throws IndexOutOfBoundsError when", () => {
+      it("the target id is the last element on the array", () => {
+        const [{ id: lastId }] = [...aetherAccordion.entries].reverse();
+        expect(() => aetherAccordion.insertEntryAfter(lastId, validEntry))
+          .to.throw()
+          .with.property("name", "IndexOutOfBoundsError");
+      });
+    });
+
+    it("returns false if no entry is found with provided id", () =>
+      expect(aetherAccordion.insertEntryAfter(15, validEntry)).to.be.false);
+    it("returns true if entry is found and entries are successfully updated", () =>
+      expect(aetherAccordion.insertEntryAfter(1, validEntry)).to.be.true);
+
+    it("inserts an entry into entries array after the specified entry id", () => {
+      const targetId = 1;
+      aetherAccordion.insertEntryAfter(targetId, validEntry);
+
+      const targetIndex = aetherAccordion.entries.findIndex(
+        entry => entry.id === targetId
+      );
+
+      expect(aetherAccordion.entries[targetIndex + 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      );
+    });
+  });
 });

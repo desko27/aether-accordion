@@ -109,4 +109,22 @@ export default class AetherAccordionController {
     this.entries.splice(targetIndex, 0, newEntry);
     return true;
   }
+
+  insertEntryAfter(id, entry) {
+    if (id === undefined) throwMissingArgumentError("id");
+    if (entry === undefined) throwMissingArgumentError("entry");
+
+    validateId(id);
+    const newEntry = validateEntry(entry);
+
+    if (this.entries.find(e => e.id === entry.id))
+      throwExistingIdError(entry.id);
+
+    const targetIndex = this.entries.findIndex(e => e.id === id);
+    if (targetIndex === -1) return false;
+
+    if (targetIndex === this.entries.length - 1) throwIndexOutOfBoundsError();
+    this.entries.splice(targetIndex + 1, 0, newEntry);
+    return true;
+  }
 }
