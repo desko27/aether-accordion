@@ -123,7 +123,7 @@ export default class AetherAccordionController {
   }
 
   appendEntry(entry) {
-    const [{ id: lastId }] = [...this.entries].reverse();
+    const { id: lastId } = this.entries[this.entries.length - 1];
     return this.insertEntryAfter(lastId, entry);
   }
 

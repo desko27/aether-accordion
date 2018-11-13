@@ -583,7 +583,9 @@ describe("AetherAccordionController", () => {
     });
 
     it("inserts an entry into entries array after the last entry id", () => {
-      const [{ id: lastId }] = [...aetherAccordion.entries].reverse();
+      const { id: lastId } = aetherAccordion.entries[
+        aetherAccordion.entries.length - 1
+      ];
       aetherAccordion.insertEntryAfter(lastId, validEntry);
 
       const targetIndex = aetherAccordion.entries.findIndex(
@@ -623,7 +625,9 @@ describe("AetherAccordionController", () => {
     });
 
     it("inserts an entry into entries array after the last entry id", () => {
-      const [{ id: lastId }] = [...aetherAccordion.entries].reverse();
+      const { id: lastId } = aetherAccordion.entries[
+        aetherAccordion.entries.length - 1
+      ];
       aetherAccordion.appendEntry(validEntry);
 
       const targetIndex = aetherAccordion.entries.findIndex(
