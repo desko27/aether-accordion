@@ -636,4 +636,36 @@ describe("AetherAccordionController", () => {
       );
     });
   });
+
+  describe("has an removeEntry method that", () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs);
+    });
+
+    it("throws MissingArgumentError when id is missing", () => {
+      expect(() => aetherAccordion.removeEntry())
+        .to.throw()
+        .with.property("name", "MissingArgumentError");
+    });
+    it("throws ArgumentTypeError when id is invalid", () => {
+      const invalidValues = ["not a number", -1, -253, true, null, [], {}];
+      invalidValues.forEach(value => {
+        expect(() => aetherAccordion.removeEntry(value))
+          .to.throw()
+          .with.property("name", "ArgumentTypeError");
+      });
+    });
+    it("returns false if no entry is found with provided id", () =>
+      expect(aetherAccordion.removeEntry(15)).to.be.false);
+    it("returns true if entry is found and it's successfully removed", () =>
+      expect(aetherAccordion.removeEntry(0)).to.be.true);
+    it("removes the specified entry if exists", () => {
+      const targetId = 1;
+      const startingLength = aetherAccordion.entries.length;
+      aetherAccordion.removeEntry(targetId);
+      expect(aetherAccordion.entries.length).to.be.equal(startingLength - 1);
+      expect(aetherAccordion.entries.find(entry => entry.id === targetId)).to.be
+        .undefined;
+    });
+  });
 });

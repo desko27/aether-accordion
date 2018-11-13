@@ -50,9 +50,7 @@ export default class AetherAccordionController {
   }
 
   setEntryTitle(id, value) {
-    if (id === undefined) throwMissingArgumentError("id");
     if (value === undefined) throwMissingArgumentError("value");
-
     const entry = this.getEntry(id);
     if (!entry) return false;
 
@@ -61,9 +59,7 @@ export default class AetherAccordionController {
   }
 
   setEntryDescription(id, value) {
-    if (id === undefined) throwMissingArgumentError("id");
     if (value === undefined) throwMissingArgumentError("value");
-
     const entry = this.getEntry(id);
     if (!entry) return false;
 
@@ -72,8 +68,6 @@ export default class AetherAccordionController {
   }
 
   activateEntry(id) {
-    if (id === undefined) throwMissingArgumentError("id");
-
     const entry = this.getEntry(id);
     if (!entry) return false;
 
@@ -82,8 +76,6 @@ export default class AetherAccordionController {
   }
 
   deactivateEntry(id) {
-    if (id === undefined) throwMissingArgumentError("id");
-
     const entry = this.getEntry(id);
     if (!entry) return false;
 
@@ -133,5 +125,16 @@ export default class AetherAccordionController {
   appendEntry(entry) {
     const [{ id: lastId }] = [...this.entries].reverse();
     return this.insertEntryAfter(lastId, entry);
+  }
+
+  removeEntry(id) {
+    if (id === undefined) throwMissingArgumentError("id");
+    validateId(id);
+
+    const startingLength = this.entries.length;
+    this.entries = this.entries.filter(entry => entry.id !== id);
+
+    if (this.entries.length < startingLength) return true;
+    return false;
   }
 }
