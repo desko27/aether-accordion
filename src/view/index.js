@@ -4,6 +4,8 @@ import {
 } from "../utils/error";
 import AetherAccordionController from "../controller";
 
+import { templates, getNodeQueries } from "./dom";
+
 /**
  * AetherAccordionController view factory.
  *
@@ -34,22 +36,14 @@ const initAetherAccordion = ({ element, entries, activeId = null }) => {
   // make a controller for every node
   const controllers = nodes.map(node => {
     // node getters
-    const getEntryNode = id => node.querySelector(`dt[data-id="${id}"]`);
-    const getEntryTitleNode = id => getEntryNode(id);
-    const getEntryDescriptionNode = id =>
-      getEntryTitleNode(id).nextElementSibling;
+    const {
+      getEntryNode,
+      getEntryTitleNode,
+      getEntryDescriptionNode
+    } = getNodeQueries(node);
 
-    // templates
-    const getEntryTitleTemplate = ({ id, title }) => `
-      <dt data-id="${id}">${title}</dt>
-    `;
-    const getEntryDescriptionTemplate = ({ description }) => `
-      <dd>${description}</dd>
-    `;
-    const getEntryTemplate = ({ id, title, description }) => `
-      ${getEntryTitleTemplate({ id, title })}
-      ${getEntryDescriptionTemplate({ description })}
-    `;
+    // template getters
+    const { getEntryTemplate } = templates;
 
     // prepare viewUpdaters for the controller
     const viewUpdaters = {
