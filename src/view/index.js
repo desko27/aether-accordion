@@ -35,14 +35,12 @@ const initAetherAccordion = ({ element, entries, activeId = null }) => {
 
   // make a controller for every node
   const controllers = nodes.map(node => {
-    // node getters
+    // load dom management functions
     const {
       getEntryNode,
       getEntryTitleNode,
       getEntryDescriptionNode
     } = getNodeQueries(node);
-
-    // template getters
     const { getEntryTemplate } = templates;
 
     // prepare viewUpdaters for the controller
@@ -85,7 +83,7 @@ const initAetherAccordion = ({ element, entries, activeId = null }) => {
       }
     };
 
-    // pass down args & view updaters to controller
+    // pass down args & view updaters to make the controller instance
     const controller = new AetherAccordionController({
       entries,
       activeId,
