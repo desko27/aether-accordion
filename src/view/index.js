@@ -4,8 +4,22 @@ import {
 } from "../utils/error";
 import AetherAccordionController from "../controller";
 
-// init aether accordion
-export default ({ element, entries, activeId = null }) => {
+/**
+ * AetherAccordionController view factory.
+ *
+ * @param element Selector string to target one or multiple elements or a
+ *                single HTMLElement.
+ * @param entries Array of objects each of them representing an accordion
+ *                entry. Each object needs the following properties: id, title
+ *                description. See AetherAccordionController for more details.
+ * @param activeId An entry ID which will be active from the beginning.
+ *                 No entry will be active if this param is missing or null.
+ *
+ * @returns As many controller instances as needed in an array. If only one
+ *          controller is needed, no array will be returned, but a single
+ *          controller instance.
+ */
+const initAetherAccordion = ({ element, entries, activeId = null }) => {
   // check incoming options
   if (element === undefined) throwMissingArgumentError("element");
   if (typeof element !== "string" && !(element instanceof window.HTMLElement))
@@ -104,3 +118,5 @@ export default ({ element, entries, activeId = null }) => {
   // return the prepared controller/s
   return controllers.length === 1 ? controllers[0] : controllers;
 };
+
+export default initAetherAccordion;
