@@ -6,7 +6,7 @@ import { validateEntries, validateEntry } from "./aether-accordion.validations";
 import { validateId } from "../aether-item/aether-item.validations";
 
 export default class AetherAccordionController {
-  constructor({ entries, activeId = null } = {}) {
+  constructor({ entries, activeId = null, viewUpdaters = {} } = {}) {
     // check for missing arguments
     if (entries === undefined) throwMissingArgumentError("entries");
 
@@ -15,6 +15,19 @@ export default class AetherAccordionController {
 
     // settle other properties into the instance
     this.activeId = activeId;
+    this.viewUpdaters = viewUpdaters;
+
+    // trigger init method which updates view
+    this.init();
+  }
+
+  updateView(funcName, ...args) {
+    if (funcName in this.viewUpdaters)
+      this.viewUpdaters[funcName](this, ...args);
+  }
+
+  init() {
+    this.updateView("init");
   }
 
   getEntries() {
@@ -26,7 +39,7 @@ export default class AetherAccordionController {
   }
 
   getActive() {
-    if (this.activeId) return this.getEntry(this.activeId);
+    if (this.activeId !== null) return this.getEntry(this.activeId);
     return null;
   }
 
@@ -55,6 +68,7 @@ export default class AetherAccordionController {
     if (!entry) return false;
 
     entry.setTitle(value);
+    this.updateView("setEntryTitle", id, value);
     return true;
   }
 
@@ -64,6 +78,7 @@ export default class AetherAccordionController {
     if (!entry) return false;
 
     entry.setDescription(value);
+    this.updateView("setEntryDescription", id, value);
     return true;
   }
 
@@ -71,7 +86,12 @@ export default class AetherAccordionController {
     const entry = this.getEntry(id);
     if (!entry) return false;
 
+    // deactivate currently active entry if any
+    if (this.activeId !== null) this.deactivateEntry(this.activeId);
+
     entry.activate();
+    this.activeId = id;
+    this.updateView("activateEntry", id);
     return true;
   }
 
@@ -80,6 +100,8 @@ export default class AetherAccordionController {
     if (!entry) return false;
 
     entry.deactivate();
+    this.activeId = null;
+    this.updateView("deactivateEntry", id);
     return true;
   }
 
@@ -97,6 +119,7 @@ export default class AetherAccordionController {
     if (targetIndex === -1) return false;
 
     this.entries.splice(targetIndex, 0, newEntry);
+    this.updateView("insertEntryBefore", id, entry);
     return true;
   }
 
@@ -114,6 +137,7 @@ export default class AetherAccordionController {
     if (targetIndex === -1) return false;
 
     this.entries.splice(targetIndex + 1, 0, newEntry);
+    this.updateView("insertEntryAfter", id, entry);
     return true;
   }
 
@@ -134,7 +158,8 @@ export default class AetherAccordionController {
     const startingLength = this.entries.length;
     this.entries = this.entries.filter(entry => entry.id !== id);
 
-    if (this.entries.length < startingLength) return true;
-    return false;
+    if (this.entries.length === startingLength) return false;
+    this.updateView("removeEntry", id);
+    return true;
   }
 }
