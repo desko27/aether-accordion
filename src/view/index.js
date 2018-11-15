@@ -9,7 +9,7 @@ import { templates, getNodeQueries } from "./dom";
 /**
  * AetherAccordionController view factory.
  *
- * @param element Selector string to target one or multiple elements or a
+ * @param element Selector string to target one or multiple elements, or a
  *                single HTMLElement.
  * @param entries Array of objects each of them representing an accordion
  *                entry. Each object needs the following properties: id, title
