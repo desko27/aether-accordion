@@ -7,8 +7,8 @@ export default () => ({
       element: ".aether-accordion",
       entries: [...new Array(1000).keys()].map(i => ({
         id: i,
-        title: `Title ${i + 1}`,
-        description: `Description #1 ${i + 1}`
+        title: `Title #${i + 1}`,
+        description: `Description #${i + 1}`
       }))
     });
   }
