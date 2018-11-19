@@ -6,6 +6,8 @@ import AetherAccordionController from "../controller";
 
 import { templates, getNodeQueries } from "./dom";
 
+const LIB_CLASS = "aether-accordion";
+
 /**
  * AetherAccordionController view factory.
  *
@@ -47,6 +49,10 @@ const initAetherAccordion = ({ element, entries = null, activeId = null }) => {
     // prepare viewUpdaters for the controller
     const viewUpdaters = {
       init: controller => {
+        // add lib class to the container
+        node.classList.add(LIB_CLASS);
+
+        // render everything in the container
         node.innerHTML = `
           ${controller
             .getEntries()

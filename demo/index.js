@@ -7,6 +7,7 @@ import hljs from "highlight.js";
 import hljsCss from "!raw-loader!highlight.js/styles/github-gist.css";
 
 import stories from "./stories";
+import "../src/view/index.scss";
 
 // load highligh.js css into root document once
 const rootDoc = window.parent.document;

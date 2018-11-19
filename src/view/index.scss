@@ -1,0 +1,32 @@
+@import "~normalize.css";
+@import "~suitcss-base/lib/base.css";
+
+.aether-accordion {
+  font-family: sans-serif;
+  color: #efefef;
+
+  dt {
+    cursor: pointer;
+    user-select: none;
+
+    padding: 12px;
+    background: #55ab54;
+
+    &.is-active {
+      font-weight: 700;
+    }
+  }
+
+  dd {
+    display: none;
+
+    padding: 12px;
+    background: #333;
+
+    font-weight: 300;
+  }
+
+  dt.is-active + dd {
+    display: block;
+  }
+}
