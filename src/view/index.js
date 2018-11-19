@@ -21,7 +21,7 @@ import { templates, getNodeQueries } from "./dom";
  *          controller is needed, no array will be returned, but a single
  *          controller instance.
  */
-const initAetherAccordion = ({ element, entries, activeId = null }) => {
+const initAetherAccordion = ({ element, entries = null, activeId = null }) => {
   // check incoming options
   if (element === undefined) throwMissingArgumentError("element");
   if (typeof element !== "string" && !(element instanceof window.HTMLElement))
@@ -37,6 +37,7 @@ const initAetherAccordion = ({ element, entries, activeId = null }) => {
   const controllers = nodes.map(node => {
     // load dom management functions
     const {
+      getAllEntryTitleDescriptionNodes,
       getEntryNode,
       getEntryTitleNode,
       getEntryDescriptionNode
@@ -83,9 +84,30 @@ const initAetherAccordion = ({ element, entries, activeId = null }) => {
       }
     };
 
+    // check entries in order to load them from the DOM if they're not passed
+    // as an argument
+    let finalEntries;
+    if (!entries) {
+      finalEntries = [...getAllEntryTitleDescriptionNodes()].reduce(
+        (pairs, item, index) => {
+          const pairIndex = Math.floor(index / 2);
+          const entry = pairs[pairIndex];
+          if (!entry) {
+            // create new entry object with id & title
+            pairs[pairIndex] = { id: pairIndex, title: item.innerHTML };
+            return pairs;
+          }
+          // add description
+          entry.description = item.innerHTML;
+          return pairs;
+        },
+        []
+      );
+    } else finalEntries = entries;
+
     // pass down args & view updaters to make the controller instance
     const controller = new AetherAccordionController({
-      entries,
+      entries: finalEntries,
       activeId,
       viewUpdaters
     });

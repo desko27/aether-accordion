@@ -1,18 +1,23 @@
 import initAetherAccordion from "../../src";
 
-export default () => {
-  const className = "aether-accordion--basic1";
-
-  return {
-    html: `<dl class="${className}" />`,
-    init: () => {
-      initAetherAccordion({
-        element: `.${className}`,
-        entries: [
-          { id: 0, title: "Title 1", description: "First description" },
-          { id: 1, title: "Title 2", description: "Second description" }
-        ]
-      });
-    }
-  };
-};
+export default () => ({
+  html: `
+    <dl>
+      <dt>Section 1</dt>
+      <dd>
+        <p>Section 1 Content...</p>
+      </dd>
+      <dt>Section 2</dt>
+      <dd>
+        <p>Section 2 Content...</p>
+      </dd>
+      <dt>Section 3</dt>
+      <dd>
+        <p>Section 3 Content...</p>
+      </dd>
+    </dl>
+  `,
+  init: () => {
+    initAetherAccordion({ element: "dl" });
+  }
+});

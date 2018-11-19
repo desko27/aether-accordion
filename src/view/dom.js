@@ -1,6 +1,7 @@
 // node queries getter
 export const getNodeQueries = node => {
   const queries = {
+    getAllEntryTitleDescriptionNodes: () => node.querySelectorAll(`dt, dd`),
     getEntryNode: id => node.querySelector(`dt[data-id="${id}"]`),
     getEntryTitleNode: id => queries.getEntryNode(id),
     getEntryDescriptionNode: id =>
