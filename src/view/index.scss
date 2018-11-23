@@ -29,6 +29,7 @@
     // note: this transition is hybrid since it gets some help from
     // js when fired, see [transition-helper] comments on js code
     transition: max-height 300ms ease-in-out;
+    will-change: max-height;
 
     > p {
       margin: 12px;
@@ -40,6 +41,7 @@
       transition-duration: 300ms;
       transition-timing-function: ease-in-out;
       transition-property: opacity, transform;
+      will-change: opacity, transform;
     }
   }
 
