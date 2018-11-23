@@ -13,7 +13,7 @@ export default () => ({
       </dd>
       <dt>Section 3</dt>
       <dd>
-        <p>Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 ContentSection 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content Section 3 Content ...</p>
+        <p>Section 3 Content...</p>
       </dd>
     </dl>
   `,
