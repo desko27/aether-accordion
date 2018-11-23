@@ -67,10 +67,25 @@ const initAetherAccordion = ({ element, entries = null, activeId = null }) => {
         getEntryDescriptionNode(id).innerHTML = value;
       },
       activateEntry: (controller, id) => {
+        // [transition-helper] set max-height to inner scroll height
+        const descriptionNode = getEntryDescriptionNode(id);
+        descriptionNode.style.maxHeight = `${descriptionNode.scrollHeight}px`;
+
+        // then add active class
         getEntryNode(id).classList.add("is-active");
       },
       deactivateEntry: (controller, id) => {
+        // [transition-helper] #1) set max-height to inner scroll height
+        const descriptionNode = getEntryDescriptionNode(id);
+        descriptionNode.style.maxHeight = `${descriptionNode.scrollHeight}px`;
+
+        // then remove active class
         getEntryNode(id).classList.remove("is-active");
+
+        // [transition-helper] #2) set max-height to 0
+        setTimeout(() => {
+          descriptionNode.style.maxHeight = 0;
+        });
       },
       insertEntryBefore: (controller, id, entry) => {
         getEntryNode(id).insertAdjacentHTML(
@@ -129,7 +144,16 @@ const initAetherAccordion = ({ element, entries = null, activeId = null }) => {
         else controller.activateEntry(id);
       };
 
+      entryEvents[id].transitionend = () => {
+        // [transition-helper] reset max-height every time transition is finished
+        getEntryDescriptionNode(id).style.removeProperty("max-height");
+      };
+
       getEntryNode(id).addEventListener("click", entryEvents[id].click);
+      getEntryDescriptionNode(id).addEventListener(
+        "transitionend",
+        entryEvents[id].transitionend
+      );
     });
 
     return controller;

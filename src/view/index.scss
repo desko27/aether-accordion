@@ -18,15 +18,21 @@
   }
 
   dd {
-    display: none;
-
-    padding: 12px;
     background: #333;
 
     font-weight: 300;
+
+    // description hidden
+    overflow-y: hidden;
+    max-height: 0;
+
+    // note: this transition is hybrid since it gets some help from
+    // js when fired, see [transition-helper] comments on js code
+    transition: max-height 300ms ease-in-out;
   }
 
   dt.is-active + dd {
-    display: block;
+    // description dropped
+    max-height: none;
   }
 }
