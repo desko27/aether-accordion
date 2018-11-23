@@ -5,7 +5,7 @@
   font-family: sans-serif;
   color: #efefef;
 
-  dt {
+  > dt {
     cursor: pointer;
     user-select: none;
 
@@ -17,14 +17,10 @@
     }
   }
 
-  dd {
+  > dd {
     background: #333;
 
     font-weight: 300;
-
-    p {
-      margin: 12px;
-    }
 
     // description hidden
     overflow-y: hidden;
@@ -33,10 +29,28 @@
     // note: this transition is hybrid since it gets some help from
     // js when fired, see [transition-helper] comments on js code
     transition: max-height 300ms ease-in-out;
+
+    > p {
+      margin: 12px;
+    }
+
+    > * {
+      opacity: 0;
+      transform: translateX(-70px);
+      transition-duration: 300ms;
+      transition-timing-function: ease-in-out;
+      transition-property: opacity, transform;
+    }
   }
 
-  dt.is-active + dd {
+  > dt.is-active + dd {
     // description dropped
     max-height: none;
+
+    > * {
+      transition-delay: 150ms;
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }

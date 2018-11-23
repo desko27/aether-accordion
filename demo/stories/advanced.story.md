@@ -10,10 +10,10 @@
 initAetherAccordion({
   element: ".aether-accordion",
   entries: [
-    { id: 0, title: "Title 1", description: "Description #1" },
-    { id: 1, title: "Title 2", description: "Description #2" },
-    { id: 2, title: "Title 3", description: "Description #3" },
-    { id: 3, title: "Title 4", description: "Description #4" }
+    { id: 0, title: "Title #1", description: "<p>Description #1</p>" },
+    { id: 1, title: "Title #2", description: "<p>Description #2</p>" },
+    { id: 2, title: "Title #3", description: "<p>Description #3</p>" },
+    { id: 3, title: "Title #4", description: "<p>Description #4</p>" }
   ]
 });
 ~~~
