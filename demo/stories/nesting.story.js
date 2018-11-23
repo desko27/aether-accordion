@@ -3,17 +3,17 @@ import initAetherAccordion from "../../src";
 export default () => ({
   html: `
     <dl class="level-1">
-      <dt>You don't wanna go down... do you?</dt>
+      <dt>You don't wanna go down... do you? 👇🏻</dt>
       <dd>
         <dl class="level-2">
           <dt>Nothing to be seen here</dt>
           <dd>
             <p>I told you!</p>
           </dd>
-          <dt>Wanna go even deeper?</dt>
+          <dt>Wanna go even deeper? 👇🏻</dt>
           <dd>
             <dl class="level-3">
-              <dt>Oh yeah</dt>
+              <dt>We're done ✋🏻</dt>
               <dd>
                 <p>Lorem ipsum</p>
               </dd>
