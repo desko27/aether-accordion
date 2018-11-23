@@ -1,8 +1,12 @@
 // node queries getter
 export const getNodeQueries = node => {
   const queries = {
-    getAllEntryTitleDescriptionNodes: () => node.querySelectorAll(`dt, dd`),
-    getEntryNode: id => node.querySelector(`dt[data-id="${id}"]`),
+    getAllEntryTitleDescriptionNodes: () =>
+      [...node.querySelectorAll(`dt, dd`)].filter(n => n.parentNode === node),
+    getEntryNode: id =>
+      [...node.querySelectorAll(`dt[data-id="${id}"]`)].find(
+        n => n.parentNode === node
+      ),
     getEntryTitleNode: id => queries.getEntryNode(id),
     getEntryDescriptionNode: id =>
       queries.getEntryTitleNode(id).nextElementSibling
