@@ -29,14 +29,20 @@ const initAetherAccordion = ({ element, entries = null, activeId = null }) => {
   if (typeof element !== "string" && !(element instanceof window.HTMLElement))
     throwArgumentTypeError("element", element, "string or HTMLElement");
 
-  // get actual dom nodes depending on the type of element
-  let nodes;
-  if (typeof element === "string")
-    nodes = [...document.querySelectorAll(element)];
-  else nodes = [element];
+  // set query vars depending on the type of element
+  const needsQuery = typeof element === "string";
+  const runQuery = () => [...document.querySelectorAll(element)];
+
+  // get actual dom nodes
+  const nodes = needsQuery ? runQuery() : [element];
 
   // make a controller for every node
-  const controllers = nodes.map(node => {
+  const controllers = nodes.map((originalNode, nodeIndex) => {
+    // apply dom query again in order to avoid losing track of any node that
+    // could be affected meanwhile, so we can init lots of accordions at once
+    // despite being nested in unexpected ways...!
+    const node = needsQuery ? runQuery()[nodeIndex] : originalNode;
+
     // load dom management functions
     const {
       getAllEntryTitleDescriptionNodes,

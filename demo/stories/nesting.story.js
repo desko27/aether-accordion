@@ -36,8 +36,6 @@ export default () => ({
     </dl>
   `,
   init: () => {
-    initAetherAccordion({ element: ".level-1" });
-    initAetherAccordion({ element: ".level-2" });
-    initAetherAccordion({ element: ".level-3" });
+    initAetherAccordion({ element: ".level-1, .level-2, .level-3" });
   }
 });
