@@ -156,6 +156,9 @@ const initAetherAccordion = ({ element, entries = null, activeId = null }) => {
       );
     });
 
+    // attach controller to the node object
+    node.aetherAccordion = controller;
+
     return controller;
   });
 
