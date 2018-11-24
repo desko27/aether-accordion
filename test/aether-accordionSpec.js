@@ -1,6 +1,7 @@
-import AetherAccordionController from '../aether-accordion'
-import AetherItemController from '../aether-item'
-import {validateEntry} from '../aether-accordion/aether-accordion.validations'
+import './globals'
+import AetherAccordionController from '../src/controller/aether-accordion'
+import AetherItemController from '../src/controller/aether-item'
+import {validateEntry} from '../src/controller/aether-accordion/aether-accordion.validations'
 
 const validArgs = {
   entries: [

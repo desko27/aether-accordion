@@ -1,4 +1,5 @@
-import AetherItemController from '../aether-item'
+import './globals'
+import AetherItemController from '../src/controller/aether-item'
 
 const validArgs = {
   id: 7,

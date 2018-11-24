@@ -9,20 +9,15 @@
     "start": "start-storybook -p 9001 -c .storybook",
     "lint": "sui-lint js && sui-lint sass",
     "precommit": "sui-precommit run",
-    "test": "cross-env NODE_ENV=test mocha -r @s-ui/polyfills -r babel-register --file scripts/test-setup.js \"src/**/*.test.js\"",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --file scripts/test-setup.js \"src/**/*.test.js\""
-  },
-  "nyc": {
-    "require": [
-      "@s-ui/polyfills",
-      "babel-register"
-    ],
-    "sourceMap": false,
-    "instrument": false
+    "test": "npm run test:browser",
+    "test:browser": "sui-test browser",
+    "test:server": "sui-test server",
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text npm run test:server"
   },
   "devDependencies": {
     "@s-ui/lint": "^2.20.0",
     "@s-ui/precommit": "^2.5.0",
+    "@s-ui/test": "^1.14.0",
     "@storybook/addon-notes": "^4.0.6",
     "@storybook/addons": "^4.0.6",
     "@storybook/core-events": "^4.0.6",
@@ -32,7 +27,6 @@
     "babel-loader": "^7.1.5",
     "babel-plugin-istanbul": "^5.1.0",
     "babel-preset-sui": "^1.10.0",
-    "babel-register": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
