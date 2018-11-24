@@ -2,7 +2,7 @@
  * Adds types to errors
  * @param type The string which is going to be used to define the error name.
  * @returns The passed error with the specified type name injected.
- * @example throw new Error("This is an error")::withType("Custom");
+ * @example throw withType.call(new Error(message), 'Custom')
  */
 export function withType(type) {
   this.name = `${type}Error`
