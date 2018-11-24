@@ -9,13 +9,13 @@
     "start": "start-storybook -p 9001 -c .storybook",
     "lint": "sui-lint js && sui-lint sass",
     "precommit": "sui-precommit run",
-    "test": "cross-env NODE_ENV=test mocha -r babel-polyfill -r babel-register --file scripts/test-setup.js \"src/**/*.test.js\"",
+    "test": "cross-env NODE_ENV=test mocha -r @s-ui/polyfills -r babel-register --file scripts/test-setup.js \"src/**/*.test.js\"",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --file scripts/test-setup.js \"src/**/*.test.js\""
   },
   "nyc": {
     "require": [
-      "babel-register",
-      "babel-polyfill"
+      "@s-ui/polyfills",
+      "babel-register"
     ],
     "sourceMap": false,
     "instrument": false
@@ -31,7 +31,6 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.5",
     "babel-plugin-istanbul": "^5.1.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-sui": "^1.10.0",
     "babel-register": "^6.26.0",
     "babel-runtime": "^6.26.0",
@@ -69,5 +68,8 @@
         ]
       }
     }
+  },
+  "dependencies": {
+    "@s-ui/polyfills": "^1.7.0"
   }
 }
