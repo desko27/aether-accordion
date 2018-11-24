@@ -1,1 +1,1 @@
-export default from "./aether-item";
+export default from './aether-item'

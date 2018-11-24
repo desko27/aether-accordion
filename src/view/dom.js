@@ -10,20 +10,20 @@ export const getNodeQueries = node => {
     getEntryTitleNode: id => queries.getEntryNode(id),
     getEntryDescriptionNode: id =>
       queries.getEntryTitleNode(id).nextElementSibling
-  };
-  return queries;
-};
+  }
+  return queries
+}
 
 // template getters
 export const templates = {
-  getEntryTitleTemplate: ({ id, title }) => `
+  getEntryTitleTemplate: ({id, title}) => `
     <dt data-id="${id}">${title}</dt>
   `,
-  getEntryDescriptionTemplate: ({ description }) => `
+  getEntryDescriptionTemplate: ({description}) => `
     <dd>${description}</dd>
   `,
-  getEntryTemplate: ({ id, title, description }) => `
-    ${templates.getEntryTitleTemplate({ id, title })}
-    ${templates.getEntryDescriptionTemplate({ description })}
+  getEntryTemplate: ({id, title, description}) => `
+    ${templates.getEntryTitleTemplate({id, title})}
+    ${templates.getEntryDescriptionTemplate({description})}
   `
-};
+}

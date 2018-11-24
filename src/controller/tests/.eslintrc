@@ -1,20 +1,5 @@
 {
-  "extends": [
-    "schibsted-chai"
-  ],
-  "env": {
-    "node": true,
-    "mocha": true
-  },
-  "rules": {
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": true
-      }
-    ]
-  },
-  "globals": {
+  "globals":{
     "expect": false,
     "sinon": false
   }

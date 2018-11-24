@@ -1,9 +1,0 @@
-{
-  "extends": [
-    "schibsted",
-    "schibsted-modules",
-    "schibsted/prettier-strict"
-  ],
-  "root": true,
-  "parser": "babel-eslint"
-}

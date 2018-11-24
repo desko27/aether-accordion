@@ -1,4 +1,4 @@
-import initAetherAccordion from "../../src";
+import initAetherAccordion from '../../src'
 
 export default () => ({
   html: `
@@ -18,6 +18,6 @@ export default () => ({
     </dl>
   `,
   init: () => {
-    initAetherAccordion({ element: "dl" });
+    initAetherAccordion({element: 'dl'})
   }
-});
+})

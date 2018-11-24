@@ -1,16 +1,16 @@
-@import "~normalize.css";
-@import "~suitcss-base/lib/base.css";
+@import '~normalize.css';
+@import '~suitcss-base/lib/base.css';
+@import 'settings';
 
-.aether-accordion {
+.aeacc-AetherAccordion {
+  color: $ae-title-color;
   font-family: sans-serif;
-  color: #efefef;
 
   > dt {
+    background: $ae-title-background;
     cursor: pointer;
-    user-select: none;
-
     padding: 12px;
-    background: #55ab54;
+    user-select: none;
 
     &.is-active {
       font-weight: 700;
@@ -18,13 +18,12 @@
   }
 
   > dd {
-    background: #333;
-
+    background: $ae-description-background;
     font-weight: 300;
 
     // description hidden
-    overflow-y: hidden;
     max-height: 0;
+    overflow-y: hidden;
 
     // note: this transition is hybrid since it gets some help from
     // js when fired, see [transition-helper] comments on js code
@@ -39,8 +38,8 @@
       opacity: 0;
       transform: translateX(-70px);
       transition-duration: 300ms;
-      transition-timing-function: ease-in-out;
       transition-property: opacity, transform;
+      transition-timing-function: ease-in-out;
       will-change: opacity, transform;
     }
   }
@@ -50,9 +49,9 @@
     max-height: none;
 
     > * {
-      transition-delay: 150ms;
       opacity: 1;
       transform: translateX(0);
+      transition-delay: 150ms;
     }
   }
 }

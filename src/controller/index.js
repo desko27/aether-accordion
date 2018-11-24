@@ -1,1 +1,1 @@
-export default from "./aether-accordion";
+export default from './aether-accordion'
