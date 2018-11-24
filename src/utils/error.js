@@ -14,7 +14,7 @@ export function withType(type) {
 
 export const throwMissingArgumentError = argument => {
   const message = `Argument '${argument}' is missing.`
-  throw new Error(message)::withType('MissingArgument')
+  throw withType.call(new Error(message), 'MissingArgument')
 }
 
 export const throwArgumentTypeError = (argument, value, expectedType) => {
@@ -22,10 +22,10 @@ export const throwArgumentTypeError = (argument, value, expectedType) => {
     `Argument '${argument}' with value '${value}' is invalid, ` +
     `expected type is '${expectedType}'.`
 
-  throw new Error(message)::withType('ArgumentType')
+  throw withType.call(new Error(message), 'ArgumentType')
 }
 
 export const throwExistingIdError = id => {
   const message = `ID '${id}' already exists.`
-  throw new Error(message)::withType('ExistingId')
+  throw withType.call(new Error(message), 'ExistingId')
 }

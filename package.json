@@ -7,30 +7,20 @@
   "license": "MIT",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
-    "lint": "npm run lint:js && npm run lint:sass",
+    "lint": "sui-lint js && sui-lint sass",
     "precommit": "sui-precommit run",
-    "lint:js": "sui-lint js --parser babel-eslint",
-    "lint:sass": "sui-lint sass",
-    "test": "cross-env NODE_ENV=test mocha -r @babel/polyfill -r @babel/register --file scripts/test-setup.js \"src/**/*.test.js\"",
+    "test": "cross-env NODE_ENV=test mocha -r babel-polyfill -r babel-register --file scripts/test-setup.js \"src/**/*.test.js\"",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --file scripts/test-setup.js \"src/**/*.test.js\""
   },
   "nyc": {
     "require": [
-      "@babel/register",
-      "@babel/polyfill"
+      "babel-register",
+      "babel-polyfill"
     ],
     "sourceMap": false,
     "instrument": false
   },
   "devDependencies": {
-    "@babel/core": "^7.1.5",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-export-default-from": "^7.0.0",
-    "@babel/plugin-proposal-function-bind": "^7.0.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.1.5",
-    "@babel/register": "^7.0.0",
     "@s-ui/lint": "^2.20.0",
     "@s-ui/precommit": "^2.5.0",
     "@storybook/addon-notes": "^4.0.6",
@@ -39,8 +29,11 @@
     "@storybook/html": "^4.0.6",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.4",
+    "babel-loader": "^7.1.5",
     "babel-plugin-istanbul": "^5.1.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-sui": "^1.10.0",
+    "babel-register": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
@@ -64,5 +57,17 @@
     ],
     "parser": "babel-eslint"
   },
-  "sasslintConfig": "./node_modules/@s-ui/lint/sass-lint.yml"
+  "sasslintConfig": "./node_modules/@s-ui/lint/sass-lint.yml",
+  "babel": {
+    "presets": [
+      "sui"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
+  }
 }

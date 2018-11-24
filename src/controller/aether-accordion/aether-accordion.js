@@ -53,12 +53,14 @@ export default class AetherAccordionController {
   }
 
   getEntryTitle(id) {
-    const title = this.getEntry(id)?.getTitle()
+    const entry = this.getEntry(id)
+    const title = entry && entry.getTitle()
     return title || null
   }
 
   getEntryDescription(id) {
-    const description = this.getEntry(id)?.getDescription()
+    const entry = this.getEntry(id)
+    const description = entry && entry.getDescription()
     return description || null
   }
 
