@@ -1,18 +1,20 @@
+/* eslint-disable import/no-webpack-loader-syntax, import/no-unresolved */
+
 import {storiesOf} from '@storybook/html'
 import {withNotes} from '@storybook/addon-notes'
 import addons from '@storybook/addons'
 import hljs from 'highlight.js'
-
-// eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
 import hljsCss from '!raw-loader!highlight.js/styles/github-gist.css'
 
 import stories from './stories'
+import customStorybookCss from '!raw-loader!sass-loader!./index.scss'
 import '../src/index.scss'
 
-// load highligh.js css into root document once
+// load extra css into root document once
 const rootDoc = window.parent.document
 const styleElement = rootDoc.createElement('style')
 styleElement.appendChild(rootDoc.createTextNode(hljsCss))
+styleElement.appendChild(rootDoc.createTextNode(customStorybookCss))
 rootDoc.head.appendChild(styleElement)
 
 // get event manager

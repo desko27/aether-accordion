@@ -1,4 +1,7 @@
-## HTML
+## Source
+
+<details>
+<summary>HTML</summary>
 
 ~~~html
 <dl>
@@ -16,9 +19,12 @@
   </dd>
 </dl>
 ~~~
+</details>
 
-## JavaScript
+<details>
+<summary>JavaScript</summary>
 
 ~~~js
 initAetherAccordion({ element: "dl" });
 ~~~
+</details>
