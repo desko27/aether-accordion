@@ -8,7 +8,6 @@ import hljsCss from '!raw-loader!highlight.js/styles/github-gist.css'
 
 import stories from './stories'
 import customStorybookCss from '!raw-loader!sass-loader!./index.scss'
-import '../src/index.scss'
 
 // load extra css into root document once
 const rootDoc = window.parent.document
@@ -17,19 +16,32 @@ styleElement.appendChild(rootDoc.createTextNode(hljsCss))
 styleElement.appendChild(rootDoc.createTextNode(customStorybookCss))
 rootDoc.head.appendChild(styleElement)
 
+// create story style element for using it later
+const storyStyleElement = document.createElement('style')
+document.head.appendChild(storyStyleElement)
+
 // get event manager
 const channel = addons.getChannel()
 
-// configure storybook
+// configure storybook for our custom behaviour
 const storybook = storiesOf('AetherAccordion', module)
   .addDecorator(withNotes)
   .addDecorator(story => {
-    const {html, init} = story()
+    const {name, html, init} = story()
+
+    // load css for this particular story
+    const storyCss = require(`!raw-loader!sass-loader!./stories/${name}.scss`)
+    storyStyleElement.innerHTML = storyCss
+
     setTimeout(() => {
+      // run javascript
       init()
+
+      // run inited event
       channel.emit('storybook/aether-accordion/inited')
     })
 
+    // render the story's html
     return html
   })
 

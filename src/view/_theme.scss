@@ -1,7 +1,7 @@
 // common vars
-$aeacc-padding: 12px;
-$aeacc-transition-duration: 300ms;
-$aeacc-transition-timing-function: ease-in-out;
+$aeacc-padding: 12px !default;
+$aeacc-transition-duration: 300ms !default;
+$aeacc-transition-timing-function: ease-in-out !default;
 
 // title vars
 $aeacc-title-background: #55ab54 !default;
@@ -25,8 +25,8 @@ $aeacc-description-font-family: sans-serif !default;
 $aeacc-description-font-size: 1em !default;
 $aeacc-description-font-weight: lighter !default;
 
-$aeacc-inactive-description-opacity: 0;
-$aeacc-inactive-description-transform: translateX(-70px);
+$aeacc-inactive-description-opacity: 0 !default;
+$aeacc-inactive-description-transform: translateX(-70px) !default;
 
-$aeacc-active-description-opacity: 1;
-$aeacc-active-description-transform: translateX(0);
+$aeacc-active-description-opacity: 1 !default;
+$aeacc-active-description-transform: translateX(0) !default;

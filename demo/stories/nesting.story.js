@@ -1,6 +1,7 @@
 import initAetherAccordion from '../../src'
 
 export default () => ({
+  name: 'nesting',
   html: `
     <dl class="level-1">
       <dt>You don't wanna go down... do you? 👇🏻</dt>

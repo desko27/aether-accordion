@@ -1,6 +1,7 @@
 import initAetherAccordion from '../../src'
 
 export default () => ({
+  name: 'basic',
   html: `
     <dl>
       <dt>Section 1</dt>
