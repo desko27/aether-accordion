@@ -1,25 +1,44 @@
 @import '~normalize.css';
 @import '~suitcss-base/lib/base.css';
-@import 'settings';
+@import 'theme';
 
 .aeacc-AetherAccordion {
-  color: $ae-title-color;
-  font-family: sans-serif;
-
   > dt {
-    background: $ae-title-background;
+    background-color: $aeacc-title-background;
+    color: $aeacc-title-color;
     cursor: pointer;
-    padding: 12px;
+
+    font-family: $aeacc-title-font-family;
+    font-size: $aeacc-title-font-size;
+    font-weight: $aeacc-title-font-weight;
+
+    padding: $aeacc-padding;
+
+    transition-duration: 200ms;
+    transition-property: color, background-color;
+    transition-timing-function: ease-out;
+
     user-select: none;
 
+    &:hover {
+      background-color: $aeacc-hover-title-background;
+      color: $aeacc-hover-title-color;
+      font-weight: $aeacc-hover-title-font-weight;
+    }
+
     &.is-active {
-      font-weight: 700;
+      background-color: $aeacc-active-title-background;
+      color: $aeacc-active-title-color;
+      font-weight: $aeacc-active-title-font-weight;
     }
   }
 
   > dd {
-    background: $ae-description-background;
-    font-weight: 300;
+    background-color: $aeacc-description-background;
+    color: $aeacc-description-color;
+    font-family: $aeacc-description-font-family;
+    font-size: $aeacc-description-font-size;
+    font-weight: $aeacc-description-font-weight;
 
     // description hidden
     max-height: 0;
@@ -27,19 +46,21 @@
 
     // note: this transition is hybrid since it gets some help from
     // js when fired, see [transition-helper] comments on js code
-    transition: max-height 300ms ease-in-out;
+    transition-duration: $aeacc-transition-duration;
+    transition-property: max-height;
+    transition-timing-function: $aeacc-transition-timing-function;
     will-change: max-height;
 
     > p {
-      margin: 12px;
+      margin: $aeacc-padding;
     }
 
     > * {
-      opacity: 0;
-      transform: translateX(-70px);
-      transition-duration: 300ms;
+      opacity: $aeacc-inactive-description-opacity;
+      transform: $aeacc-inactive-description-transform;
+      transition-duration: $aeacc-transition-duration;
       transition-property: opacity, transform;
-      transition-timing-function: ease-in-out;
+      transition-timing-function: $aeacc-transition-timing-function;
       will-change: opacity, transform;
     }
   }
@@ -49,9 +70,9 @@
     max-height: none;
 
     > * {
-      opacity: 1;
-      transform: translateX(0);
-      transition-delay: 150ms;
+      opacity: $aeacc-active-description-opacity;
+      transform: $aeacc-active-description-transform;
+      transition-delay: $aeacc-transition-duration / 2;
     }
   }
 }

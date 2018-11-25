@@ -1,0 +1,32 @@
+// common vars
+$aeacc-padding: 12px;
+$aeacc-transition-duration: 300ms;
+$aeacc-transition-timing-function: ease-in-out;
+
+// title vars
+$aeacc-title-background: #55ab54 !default;
+$aeacc-title-color: #efefef !default;
+$aeacc-title-font-family: sans-serif !default;
+$aeacc-title-font-size: 1em !default;
+$aeacc-title-font-weight: normal !default;
+
+$aeacc-hover-title-background: lighten($aeacc-title-background, 10%) !default;
+$aeacc-hover-title-color: $aeacc-title-color !default;
+$aeacc-hover-title-font-weight: $aeacc-title-font-weight !default;
+
+$aeacc-active-title-background: darken($aeacc-title-background, 10%) !default;
+$aeacc-active-title-color: lighten($aeacc-title-background, 30%) !default;
+$aeacc-active-title-font-weight: $aeacc-title-font-weight !default;
+
+// description vars
+$aeacc-description-background: #333333 !default;
+$aeacc-description-color: #efefef !default;
+$aeacc-description-font-family: sans-serif !default;
+$aeacc-description-font-size: 1em !default;
+$aeacc-description-font-weight: lighter !default;
+
+$aeacc-inactive-description-opacity: 0;
+$aeacc-inactive-description-transform: translateX(-70px);
+
+$aeacc-active-description-opacity: 1;
+$aeacc-active-description-transform: translateX(0);
