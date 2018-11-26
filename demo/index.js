@@ -7,9 +7,12 @@ import hljs from 'highlight.js'
 import hljsCss from '!raw-loader!highlight.js/styles/github-gist.css'
 
 import customStorybookCss from '!to-string-loader!css-loader!sass-loader!./index.scss'
+import sourceTemplateMd from './source.template.md'
 
 // requires for story files
 const reqStories = require.context('./stories', true, /story\.js$/)
+const reqJs = require.context('!raw-loader!./stories', true, /story\.js$/)
+const reqSass = require.context('!raw-loader!./stories', true, /styles\.scss$/)
 const reqInfo = require.context('./stories', true, /info\.json$/)
 const reqHtml = require.context('./stories', true, /index\.html$/)
 const reqNotes = require.context('./stories', true, /notes\.md$/)
@@ -19,6 +22,8 @@ const reqStyles = require.context(
   /styles\.scss$/
 )
 const storyFilesSchema = {
+  js: {file: 'story.js', req: reqJs},
+  sass: {file: 'styles.scss', req: reqSass},
   info: {file: 'info.json', req: reqInfo},
   html: {file: 'index.html', req: reqHtml},
   css: {file: 'styles.scss', req: reqStyles},
@@ -87,8 +92,23 @@ reqStories.keys().forEach(filename => {
   }
 
   // get story's displayName and extra data we may need right now
-  const {info, notes} = storyFiles
+  const {js, sass, html, info, notes: rawNotes} = storyFiles
   const displayName = (info && info.name) || name
+
+  // parse markdown notes and apply some useful replacements
+  const notes =
+    rawNotes &&
+    rawNotes
+      .replace('((source))', sourceTemplateMd)
+      .replace('((html))', `~~~html\n${html}\n~~~`)
+      .replace(
+        '((js))',
+        `~~~js\n${js.replace('$lib', 'aether-accordion')}\n~~~`
+      )
+      .replace(
+        '((sass))',
+        `~~~scss\n${sass.replace('$lib', 'aether-accordion')}\n~~~`
+      )
 
   // FINALLY add story to the storybook
   storybook.add(displayName, () => extendedStory, {
