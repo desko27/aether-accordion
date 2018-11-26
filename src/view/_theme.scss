@@ -28,6 +28,7 @@ $aeacc-description-font-size: 1em !default;
 $aeacc-description-font-weight: lighter !default;
 $aeacc-description-transition-duration: $aeacc-transition-duration !default;
 $aeacc-description-transition-timing-function: $aeacc-transition-timing-function !default;
+$aeacc-description-transition-delay: $aeacc-description-transition-duration / 2 !default;
 
 $aeacc-inactive-description-opacity: 0 !default;
 $aeacc-inactive-description-transform: translateX(-70px) !default;

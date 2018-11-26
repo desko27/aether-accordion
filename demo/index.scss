@@ -3,7 +3,16 @@
 .addon-notes-container {
   summary {
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
+    margin-bottom: 8px;
+
+    // remove ugly stuff
+    outline: none;
+    user-select: none;
+
+    + br {
+      display: none;
+    }
   }
 }

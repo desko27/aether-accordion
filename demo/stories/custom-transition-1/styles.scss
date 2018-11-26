@@ -1,0 +1,8 @@
+$aeacc-transition-duration: 600ms;
+$aeacc-transition-timing-function: cubic-bezier(.68, -.55, .265, 1.55);
+
+$aeacc-description-transition-delay: unset;
+$aeacc-inactive-description-transform: translateY(-100px) rotate(30deg);
+$aeacc-active-description-transform: translateY(0) rotate(0);
+
+@import '~$lib/scss';

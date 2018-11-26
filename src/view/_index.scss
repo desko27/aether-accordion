@@ -72,7 +72,7 @@
     > * {
       opacity: $aeacc-active-description-opacity;
       transform: $aeacc-active-description-transform;
-      transition-delay: $aeacc-transition-duration / 2;
+      transition-delay: $aeacc-description-transition-delay;
     }
   }
 }
