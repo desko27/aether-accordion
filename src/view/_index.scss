@@ -14,9 +14,9 @@
 
     padding: $aeacc-padding;
 
-    transition-duration: 200ms;
+    transition-duration: $aeacc-title-transition-duration;
     transition-property: color, background-color;
-    transition-timing-function: ease-out;
+    transition-timing-function: $aeacc-title-transition-timing-function;
 
     user-select: none;
 
@@ -46,9 +46,9 @@
 
     // note: this transition is hybrid since it gets some help from
     // js when fired, see [transition-helper] comments on js code
-    transition-duration: $aeacc-transition-duration;
+    transition-duration: $aeacc-description-transition-duration;
     transition-property: max-height;
-    transition-timing-function: $aeacc-transition-timing-function;
+    transition-timing-function: $aeacc-description-transition-timing-function;
     will-change: max-height;
 
     > p {
@@ -58,9 +58,9 @@
     > * {
       opacity: $aeacc-inactive-description-opacity;
       transform: $aeacc-inactive-description-transform;
-      transition-duration: $aeacc-transition-duration;
+      transition-duration: $aeacc-description-transition-duration;
       transition-property: opacity, transform;
-      transition-timing-function: $aeacc-transition-timing-function;
+      transition-timing-function: $aeacc-description-transition-timing-function;
       will-change: opacity, transform;
     }
   }

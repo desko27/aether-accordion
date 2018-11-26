@@ -9,6 +9,8 @@ $aeacc-title-color: #efefef !default;
 $aeacc-title-font-family: sans-serif !default;
 $aeacc-title-font-size: 1em !default;
 $aeacc-title-font-weight: normal !default;
+$aeacc-title-transition-duration: $aeacc-transition-duration !default;
+$aeacc-title-transition-timing-function: $aeacc-transition-timing-function !default;
 
 $aeacc-hover-title-background: lighten($aeacc-title-background, 10%) !default;
 $aeacc-hover-title-color: $aeacc-title-color !default;
@@ -24,6 +26,8 @@ $aeacc-description-color: #efefef !default;
 $aeacc-description-font-family: sans-serif !default;
 $aeacc-description-font-size: 1em !default;
 $aeacc-description-font-weight: lighter !default;
+$aeacc-description-transition-duration: $aeacc-transition-duration !default;
+$aeacc-description-transition-timing-function: $aeacc-transition-timing-function !default;
 
 $aeacc-inactive-description-opacity: 0 !default;
 $aeacc-inactive-description-transform: translateX(-70px) !default;
