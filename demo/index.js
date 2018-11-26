@@ -8,14 +8,22 @@ import hljsCss from '!raw-loader!highlight.js/styles/github-gist.css'
 
 import customStorybookCss from '!to-string-loader!css-loader!sass-loader!./index.scss'
 
-// story files requires
-const reqStories = require.context('./stories', true, /\.story\.js$/)
-const reqNotes = require.context('./stories', true, /\.story\.md$/)
+// requires for story files
+const reqStories = require.context('./stories', true, /story\.js$/)
+const reqInfo = require.context('./stories', true, /info\.json$/)
+const reqHtml = require.context('./stories', true, /index\.html$/)
+const reqNotes = require.context('./stories', true, /notes\.md$/)
 const reqStyles = require.context(
   '!to-string-loader!css-loader!sass-loader!./stories',
   true,
-  /\.scss$/
+  /styles\.scss$/
 )
+const storyFilesSchema = {
+  info: {file: 'info.json', req: reqInfo},
+  html: {file: 'index.html', req: reqHtml},
+  css: {file: 'styles.scss', req: reqStyles},
+  notes: {file: 'notes.md', req: reqNotes}
+}
 
 // load extra css into root document once
 const rootDoc = window.parent.document
@@ -52,35 +60,38 @@ const storybook = storiesOf('AetherAccordion', module)
     return html
   })
 
-// add all the stories
+// add each story with its files
 reqStories.keys().forEach(filename => {
-  const {default: story} = reqStories(filename)
+  const {default: storyJs} = reqStories(filename)
 
-  // filename comes in the shape of ./name.story.js
-  const name = filename.slice(2).split('.')[0]
+  // filename comes in the shape of ./<name>/story.js
+  const name = filename.slice(2).split('/')[0]
 
-  // load styles file for this story
-  const allStylesFilenames = reqStyles.keys()
-  const storyStylesFilename = `./${name}.scss`
-  const styles = allStylesFilenames.includes(storyStylesFilename)
-    ? reqStyles(storyStylesFilename)
-    : null
-
-  // load notes file for this story
-  const allNotesFilenames = reqNotes.keys()
-  const storyNotesFilename = `./${name}.story.md`
-  const notes = allNotesFilenames.includes(storyNotesFilename)
-    ? reqNotes(storyNotesFilename)
-    : null
+  // load the extra files for this story
+  const storyFiles = Object.entries(storyFilesSchema).reduce(
+    (obj, [key, {file, req}]) => {
+      const allFilenames = req.keys()
+      const storyFilename = `./${name}/${file}`
+      return {
+        ...obj,
+        [key]: allFilenames.includes(storyFilename) ? req(storyFilename) : null
+      }
+    },
+    {}
+  )
 
   // add some collected stuff to the story object
   const extendedStory = {
-    ...story,
-    css: styles
+    init: storyJs,
+    ...storyFiles
   }
 
+  // get story's displayName and extra data we may need right now
+  const {info, notes} = storyFiles
+  const displayName = (info && info.name) || name
+
   // FINALLY add story to the storybook
-  storybook.add(name, () => extendedStory, {
+  storybook.add(displayName, () => extendedStory, {
     notes: {markdown: notes || '-'}
   })
 })
