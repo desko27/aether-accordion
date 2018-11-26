@@ -1,7 +1,6 @@
 import initAetherAccordion from '../../src'
 
-export default () => ({
-  name: 'stress-1k',
+export default {
   html: `<dl class="aether-accordion" />`,
   init: () => {
     initAetherAccordion({
@@ -13,4 +12,4 @@ export default () => ({
       }))
     })
   }
-})
+}

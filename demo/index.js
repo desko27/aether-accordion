@@ -6,8 +6,16 @@ import addons from '@storybook/addons'
 import hljs from 'highlight.js'
 import hljsCss from '!raw-loader!highlight.js/styles/github-gist.css'
 
-import stories from './stories'
-import customStorybookCss from '!raw-loader!sass-loader!./index.scss'
+import customStorybookCss from '!to-string-loader!css-loader!sass-loader!./index.scss'
+
+// story files requires
+const reqStories = require.context('./stories', true, /\.story\.js$/)
+const reqNotes = require.context('./stories', true, /\.story\.md$/)
+const reqStyles = require.context(
+  '!to-string-loader!css-loader!sass-loader!./stories',
+  true,
+  /\.scss$/
+)
 
 // load extra css into root document once
 const rootDoc = window.parent.document
@@ -27,11 +35,10 @@ const channel = addons.getChannel()
 const storybook = storiesOf('AetherAccordion', module)
   .addDecorator(withNotes)
   .addDecorator(story => {
-    const {name, html, init} = story()
+    const {html, css, init} = story()
 
     // load css for this particular story
-    const storyCss = require(`!raw-loader!sass-loader!./stories/${name}.scss`)
-    storyStyleElement.innerHTML = storyCss
+    storyStyleElement.innerHTML = css || ''
 
     setTimeout(() => {
       // run javascript
@@ -46,11 +53,37 @@ const storybook = storiesOf('AetherAccordion', module)
   })
 
 // add all the stories
-stories.forEach(({name, story, notes}) =>
-  storybook.add(name, story, {
+reqStories.keys().forEach(filename => {
+  const {default: story} = reqStories(filename)
+
+  // filename comes in the shape of ./name.story.js
+  const name = filename.slice(2).split('.')[0]
+
+  // load styles file for this story
+  const allStylesFilenames = reqStyles.keys()
+  const storyStylesFilename = `./${name}.scss`
+  const styles = allStylesFilenames.includes(storyStylesFilename)
+    ? reqStyles(storyStylesFilename)
+    : null
+
+  // load notes file for this story
+  const allNotesFilenames = reqNotes.keys()
+  const storyNotesFilename = `./${name}.story.md`
+  const notes = allNotesFilenames.includes(storyNotesFilename)
+    ? reqNotes(storyNotesFilename)
+    : null
+
+  // add some collected stuff to the story object
+  const extendedStory = {
+    ...story,
+    css: styles
+  }
+
+  // FINALLY add story to the storybook
+  storybook.add(name, () => extendedStory, {
     notes: {markdown: notes || '-'}
   })
-)
+})
 
 // apply syntax highlighting to readme code blocks every time an
 // aether-accordion story is inited
