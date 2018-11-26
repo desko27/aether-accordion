@@ -9,5 +9,10 @@ module.exports = {
         include: path.resolve(__dirname, "../")
       }
     ]
+  },
+  resolve: {
+    alias: {
+      $lib: path.resolve(__dirname, "../src/")
+    }
   }
 };

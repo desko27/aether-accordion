@@ -1,4 +1,4 @@
-import initAetherAccordion from '../../../src'
+import initAetherAccordion from '$lib'
 
 export default () => {
   initAetherAccordion({
