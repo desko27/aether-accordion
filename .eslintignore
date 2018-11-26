@@ -1,1 +1,5 @@
+# lint storybook config
+!/.storybook
+
+# ignore coverage build files
 /coverage
