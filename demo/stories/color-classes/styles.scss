@@ -1,0 +1,9 @@
+@import '~$lib/scss';
+
+.story--flex {
+  display: flex;
+
+  > * {
+    flex-grow: 1;
+  }
+}

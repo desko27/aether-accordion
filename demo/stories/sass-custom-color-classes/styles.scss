@@ -1,0 +1,15 @@
+$aeacc-colors: (
+  medium-aquamarine: #66cdaa,
+  deep-sky-blue: #02beff,
+  facebook: #3b5998,
+);
+
+@import '~$lib/scss';
+
+.story--flex {
+  display: flex;
+
+  > * {
+    flex-grow: 1;
+  }
+}

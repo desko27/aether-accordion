@@ -1,0 +1,31 @@
+///
+/// Creates color classes from `$colors-map` and lets you specify the code
+/// block having `$color` var available.
+///
+/// @param  {map}     $colors-map       [null]  Colors map.
+/// @param  {string}  $selector-prefix  [null]  Add class prefix.
+/// @param  {string}  $selector-suffix  [null]  Add extra classes or pseudo-classes.
+///
+/// @example scss
+///   .my-class {
+///     @include colorize() {
+///       color: $color;
+///       border-color: $color;
+///     }
+///   }
+///
+@mixin colorize($colors-map: null, $selector-prefix: null, $selector-suffix: null) {
+  // iterate over the colors map
+  @each $key, $color in $colors-map {
+    // make $key & $color globals as they cannot be accessed
+    // any other way in @content block when using the mixin!
+    // https://github.com/sass/sass/issues/871
+    $key: $key !global;
+    $color: $color !global;
+
+    // default: target the current item (&)
+    &.#{$selector-prefix}#{$key}#{$selector-suffix} {
+      @content;
+    }
+  }
+}

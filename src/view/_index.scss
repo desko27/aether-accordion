@@ -1,5 +1,7 @@
 @import '~normalize-css/normalize.css';
 @import '~suitcss-base/lib/base.css';
+
+@import 'functions';
 @import 'theme';
 
 .aeacc-AetherAccordion {
@@ -73,6 +75,21 @@
       opacity: $aeacc-active-description-opacity;
       transform: $aeacc-active-description-transform;
       transition-delay: $aeacc-description-transition-delay;
+    }
+  }
+
+  @include colorize($aeacc-colors, 'aeacc-AetherAccordion--') {
+    > dt {
+      background-color: $color;
+
+      &:hover {
+        background-color: lighten($color, 10%);
+      }
+
+      &.is-active {
+        background-color: darken($color, 10%);
+        color: lighten($color, 30%);
+      }
     }
   }
 }
