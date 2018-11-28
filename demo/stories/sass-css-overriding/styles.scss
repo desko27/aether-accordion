@@ -1,0 +1,30 @@
+$my-custom-border: #11a0b3;
+$my-custom-border-active: #5d0d6d;
+
+$aeacc-padding: 16px;
+
+$aeacc-title-font-size: 1.1em;
+$aeacc-title-background: transparent;
+$aeacc-title-color: $my-custom-border;
+$aeacc-active-title-color: $my-custom-border-active;
+
+$aeacc-description-background: transparent;
+$aeacc-description-color: #333333;
+
+dl.custom-AetherAccordion {
+  > dt {
+    border: 2px dashed $my-custom-border;
+    border-radius: 100px;
+    transition-property: color, border;
+
+    &.is-active {
+      border-color: $my-custom-border-active;
+    }
+  }
+
+  > dd + dt {
+    margin-top: 20px;
+  }
+}
+
+@import '~$lib/scss';
