@@ -1,7 +1,7 @@
-import { configure } from "@storybook/html";
+import {configure} from '@storybook/html'
 
 function loadStories() {
-  require("../demo/index.js");
+  require('../demo/index.js')
 }
 
-configure(loadStories, module);
+configure(loadStories, module)

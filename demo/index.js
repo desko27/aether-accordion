@@ -2,6 +2,7 @@
 
 import {storiesOf} from '@storybook/html'
 import {withNotes} from '@storybook/addon-notes'
+import CoreEvents from '@storybook/core-events'
 import addons from '@storybook/addons'
 import hljs from 'highlight.js'
 import hljsCss from '!raw-loader!highlight.js/styles/github-gist.css'
@@ -31,7 +32,8 @@ const storyFilesSchema = {
 }
 
 // load extra css into root document once
-const rootDoc = window.parent.document
+const rootWindow = window.parent
+const rootDoc = rootWindow.document
 const styleElement = rootDoc.createElement('style')
 styleElement.appendChild(rootDoc.createTextNode(hljsCss))
 styleElement.appendChild(rootDoc.createTextNode(customStorybookCss))
@@ -41,38 +43,28 @@ rootDoc.head.appendChild(styleElement)
 const storyStyleElement = document.createElement('style')
 document.head.appendChild(storyStyleElement)
 
-// get event manager
+// get storybook's event manager
 const channel = addons.getChannel()
 
 // configure storybook for our custom behaviour
 const storybook = storiesOf('AetherAccordion', module)
   .addDecorator(withNotes)
   .addDecorator(story => {
-    const {html, css, init} = story()
+    const {html, css} = story()
 
     // load css for this particular story
     storyStyleElement.innerHTML = css || ''
-
-    setTimeout(() => {
-      // run javascript
-      init()
-
-      // run inited event
-      channel.emit('storybook/aether-accordion/inited')
-    })
 
     // render the story's html
     return html
   })
 
-// add each story with its files
+// add each story with its additional files
 reqStories.keys().forEach(filename => {
-  const {default: storyJs} = reqStories(filename)
-
-  // filename comes in the shape of ./<name>/story.js
+  // story's filename comes in the shape of ./<name>/story.js
   const name = filename.slice(2).split('/')[0]
 
-  // load the extra files for this story
+  // load the additional files associated with this story
   const storyFiles = Object.entries(storyFilesSchema).reduce(
     (obj, [key, {file, req}]) => {
       const allFilenames = req.keys()
@@ -85,17 +77,27 @@ reqStories.keys().forEach(filename => {
     {}
   )
 
-  // add some collected stuff to the story object
-  const extendedStory = {
-    init: storyJs,
-    ...storyFiles
+  // get story's JavaScript and prepare a runner function
+  const {default: storyJs} = reqStories(filename)
+  const runJavaScript = () => {
+    storyJs()
+
+    // emit inited event
+    channel.emit('storybook/aether-accordion/inited')
   }
 
-  // get story's displayName and extra data we may need right now
+  // get story's displayName and extra data
   const {js, sass, html, info, notes: rawNotes} = storyFiles
   const displayName = (info && info.name) || name
 
-  // parse markdown notes and apply some useful replacements
+  // run story's JavaScript any time a story's html gets rendered
+  channel.on(CoreEvents.STORY_RENDERED, () => {
+    const currentStoryDisplayName = rootWindow.__currentStoryDisplayName
+    if (currentStoryDisplayName !== displayName) return
+    runJavaScript()
+  })
+
+  // apply some useful replacements to markdown notes before they get parsed
   const notes =
     rawNotes &&
     rawNotes
@@ -110,15 +112,28 @@ reqStories.keys().forEach(filename => {
         `~~~scss\n${sass.replace('$lib', 'aether-accordion')}\n~~~`
       )
 
+  // add some collected stuff to the story object in order to make it available
+  // to the story decorator
+  const extendedStory = {
+    name,
+    displayName,
+    ...storyFiles
+  }
+
   // FINALLY add story to the storybook
   storybook.add(displayName, () => extendedStory, {
     notes: {markdown: notes || '-'}
   })
 })
 
-// apply syntax highlighting to readme code blocks every time an
-// aether-accordion story is inited
-channel.on('storybook/aether-accordion/inited', () => {
-  const blocks = rootDoc.querySelectorAll('.addon-notes-container pre code')
-  blocks.forEach(block => hljs.highlightBlock(block))
+// apply syntax highlighting to readme code blocks every time a notes panel
+// is inited
+channel.on('storybook/notes/add_notes', () => {
+  setTimeout(() => {
+    const blocks = rootDoc.querySelectorAll('.addon-notes-container pre code')
+    blocks.forEach(block => hljs.highlightBlock(block))
+  })
 })
+
+// do something every time an aether-accordion story is fully inited
+channel.on('storybook/aether-accordion/inited', () => {})
