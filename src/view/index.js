@@ -136,27 +136,29 @@ const initAetherAccordion = ({element, entries = null, activeId = null}) => {
       viewUpdaters
     })
 
-    // add events at each entry
-    const entryEvents = {}
-    controller.getEntries().forEach(({id}) => {
-      if (entryEvents[id] === undefined) entryEvents[id] = {}
+    // add click event at the entire accordion in order to handle clicks on
+    // any entry that gets added after the init too
+    node.addEventListener('click', event => {
+      // do nothing if clicked element is not a <dt> children
+      const clickedEl = event.target
+      if (clickedEl.parentNode !== node || clickedEl.tagName !== 'DT') return
 
-      entryEvents[id].click = () => {
-        const aid = controller.getActiveId()
-        if (aid === id) controller.deactivateEntry(id)
-        else controller.activateEntry(id)
-      }
+      const id = parseInt(clickedEl.dataset.id)
+      const aid = controller.getActiveId()
+      if (aid === id) controller.deactivateEntry(id)
+      else controller.activateEntry(id)
+    })
 
-      entryEvents[id].transitionend = () => {
-        // [transition-helper] reset max-height every time transition is finished
-        getEntryDescriptionNode(id).style.removeProperty('max-height')
-      }
+    node.addEventListener('transitionend', event => {
+      // do nothing if event element is not a <dd> children
+      const eventEl = event.target
+      if (eventEl.parentNode !== node || eventEl.tagName !== 'DD') return
 
-      getEntryNode(id).addEventListener('click', entryEvents[id].click)
-      getEntryDescriptionNode(id).addEventListener(
-        'transitionend',
-        entryEvents[id].transitionend
-      )
+      const dtElement = eventEl.previousElementSibling
+      const id = parseInt(dtElement.dataset.id)
+
+      // [transition-helper] reset max-height every time transition is finished
+      getEntryDescriptionNode(id).style.removeProperty('max-height')
     })
 
     // attach controller to the node object
