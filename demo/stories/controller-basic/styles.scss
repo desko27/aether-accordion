@@ -1,0 +1,15 @@
+@import '~$lib/scss';
+
+$button-background-color: #cccccc;
+$button-border-color: #999999;
+
+.story--actions {
+  margin: 20px;
+
+  button {
+    background: $button-background-color;
+    border: 1px solid $button-border-color;
+    margin: 5px;
+    padding: 7px;
+  }
+}

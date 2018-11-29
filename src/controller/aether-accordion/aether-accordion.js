@@ -1,5 +1,7 @@
 import {
   throwMissingArgumentError,
+  throwArgumentTypeError,
+  throwBadArgumentError,
   throwExistingIdError
 } from '../../utils/error'
 import {validateEntries, validateEntry} from './aether-accordion.validations'
@@ -7,11 +9,31 @@ import {validateId} from '../aether-item/aether-item.validations'
 
 export default class AetherAccordionController {
   constructor({entries, activeId = null, viewUpdaters = {}} = {}) {
-    // check for missing arguments
+    // check for missing arguments and argument types
     if (entries === undefined) throwMissingArgumentError('entries')
+    if (!Array.isArray(entries))
+      throwArgumentTypeError('entries', entries, 'array')
+
+    // check for coherence in the presence of IDs
+    // (all entries have it or none of them)
+    if (
+      !entries.every(entry => typeof entry.id === 'number') &&
+      !entries.every(entry => entry.id === undefined)
+    )
+      throwBadArgumentError(
+        'entries',
+        entries,
+        'Incoherent presence of IDs. If you want to use IDs please provide ' +
+          "them for all your entries. Otherwise, don't set any."
+      )
 
     // validate entries and parse them into actual item controllers
-    this.entries = validateEntries(entries)
+    // ** add ID to each one if it's actually missing
+    const entriesWithId = entries.map((entry, index) => {
+      if (entry.id === undefined) return {id: index, ...entry}
+      return entry
+    })
+    this.entries = validateEntries(entriesWithId)
 
     // settle other properties into the instance
     this.activeId = activeId
@@ -28,6 +50,13 @@ export default class AetherAccordionController {
 
   init() {
     this.updateView('init')
+  }
+
+  getNewId() {
+    const existingIds = this.entries.map(entry => entry.id)
+    let autoincrement = 0
+    while (existingIds.includes(autoincrement)) autoincrement++
+    return autoincrement
   }
 
   getEntries() {
@@ -110,41 +139,47 @@ export default class AetherAccordionController {
   insertEntryBefore(id, entry) {
     if (id === undefined) throwMissingArgumentError('id')
     if (entry === undefined) throwMissingArgumentError('entry')
-
+    if (typeof entry !== 'object' || entry === null)
+      throwArgumentTypeError('entry', entry, 'object')
     validateId(id)
+
+    if (entry.id === undefined) entry.id = this.getNewId()
     const newEntry = validateEntry(entry)
 
     if (this.entries.find(e => e.id === entry.id))
       throwExistingIdError(entry.id)
 
     const targetIndex = this.entries.findIndex(e => e.id === id)
-    if (targetIndex === -1) return false
+    if (targetIndex === -1) return null
 
     this.entries.splice(targetIndex, 0, newEntry)
     this.updateView('insertEntryBefore', id, entry)
-    return true
+    return newEntry.getId()
   }
 
   insertEntryAfter(id, entry) {
     if (id === undefined) throwMissingArgumentError('id')
     if (entry === undefined) throwMissingArgumentError('entry')
-
+    if (typeof entry !== 'object' || entry === null)
+      throwArgumentTypeError('entry', entry, 'object')
     validateId(id)
+
+    if (entry.id === undefined) entry.id = this.getNewId()
     const newEntry = validateEntry(entry)
 
     if (this.entries.find(e => e.id === entry.id))
       throwExistingIdError(entry.id)
 
     const targetIndex = this.entries.findIndex(e => e.id === id)
-    if (targetIndex === -1) return false
+    if (targetIndex === -1) return null
 
     this.entries.splice(targetIndex + 1, 0, newEntry)
     this.updateView('insertEntryAfter', id, entry)
-    return true
+    return newEntry.getId()
   }
 
   prependEntry(entry) {
-    const firstId = 0
+    const {id: firstId} = this.entries[0]
     return this.insertEntryBefore(firstId, entry)
   }
 

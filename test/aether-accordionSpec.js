@@ -74,7 +74,6 @@ describe('AetherAccordionController', () => {
       it("'entries' argument receives invalid values", () => {
         const {title, ...entryWithoutTitle} = validEntry
         const {description, ...entryWithoutDescription} = validEntry
-        const {id, ...entryWithoutId} = validEntry
         const invalidValues = [
           'a string',
           12,
@@ -85,7 +84,6 @@ describe('AetherAccordionController', () => {
           {},
           [entryWithoutTitle],
           [entryWithoutDescription],
-          [entryWithoutId],
           [{...validEntry, id: 'invalid id'}]
         ]
         invalidValues.forEach(value => {
@@ -437,7 +435,6 @@ describe('AetherAccordionController', () => {
       it("'entry' argument receives invalid values", () => {
         const {title, ...entryWithoutTitle} = validEntry
         const {description, ...entryWithoutDescription} = validEntry
-        const {id, ...entryWithoutId} = validEntry
         const invalidValues = [
           'a string',
           12,
@@ -448,7 +445,6 @@ describe('AetherAccordionController', () => {
           {},
           entryWithoutTitle,
           entryWithoutDescription,
-          entryWithoutId,
           {...validEntry, id: 'invalid id'}
         ]
         invalidValues.forEach(value => {
@@ -469,10 +465,10 @@ describe('AetherAccordionController', () => {
       })
     })
 
-    it('returns false if no entry is found with provided id', () =>
-      expect(aetherAccordion.insertEntryBefore(15, validEntry)).to.be.false)
-    it('returns true if entry is found and entries are successfully updated', () =>
-      expect(aetherAccordion.insertEntryBefore(1, validEntry)).to.be.true)
+    it('returns null if no entry is found with provided id', () =>
+      expect(aetherAccordion.insertEntryBefore(15, validEntry)).to.be.null)
+    it('returns the new id if entry is found and entries are successfully updated', () =>
+      expect(aetherAccordion.insertEntryBefore(1, validEntry)).to.equal(3))
 
     it('inserts an entry into entries array before the specified entry id', () => {
       const targetId = 1
@@ -532,7 +528,6 @@ describe('AetherAccordionController', () => {
       it("'entry' argument receives invalid values", () => {
         const {title, ...entryWithoutTitle} = validEntry
         const {description, ...entryWithoutDescription} = validEntry
-        const {id, ...entryWithoutId} = validEntry
         const invalidValues = [
           'a string',
           12,
@@ -543,7 +538,6 @@ describe('AetherAccordionController', () => {
           {},
           entryWithoutTitle,
           entryWithoutDescription,
-          entryWithoutId,
           {...validEntry, id: 'invalid id'}
         ]
         invalidValues.forEach(value => {
@@ -564,10 +558,10 @@ describe('AetherAccordionController', () => {
       })
     })
 
-    it('returns false if no entry is found with provided id', () =>
-      expect(aetherAccordion.insertEntryAfter(15, validEntry)).to.be.false)
-    it('returns true if entry is found and entries are successfully updated', () =>
-      expect(aetherAccordion.insertEntryAfter(1, validEntry)).to.be.true)
+    it('returns null if no entry is found with provided id', () =>
+      expect(aetherAccordion.insertEntryAfter(15, validEntry)).to.be.null)
+    it('returns the new id if entry is found and entries are successfully updated', () =>
+      expect(aetherAccordion.insertEntryAfter(1, validEntry)).to.equal(3))
 
     it('inserts an entry into entries array after the specified entry id', () => {
       const targetId = 1

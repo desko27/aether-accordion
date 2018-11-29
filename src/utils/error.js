@@ -25,6 +25,14 @@ export const throwArgumentTypeError = (argument, value, expectedType) => {
   throw withType.call(new Error(message), 'ArgumentType')
 }
 
+export const throwBadArgumentError = (argument, value, reason) => {
+  const message =
+    `Argument '${argument}' with value '${value}' is invalid, ` +
+    `the reason is '${reason}'.`
+
+  throw withType.call(new Error(message), 'ArgumentType')
+}
+
 export const throwExistingIdError = id => {
   const message = `ID '${id}' already exists.`
   throw withType.call(new Error(message), 'ExistingId')

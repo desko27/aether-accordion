@@ -46,6 +46,12 @@ document.head.appendChild(storyStyleElement)
 // get storybook's event manager
 const channel = addons.getChannel()
 
+// shared var to make sure javascript doesn't run twice for a story...
+// this is because storybook happens to run STORY_RENDERED event twice during
+// the first load!
+// contains the name of the last story which ran its javascript
+let storyJavaScriptRan
+
 // configure storybook for our custom behaviour
 const storybook = storiesOf('AetherAccordion', module)
   .addDecorator(withNotes)
@@ -80,9 +86,14 @@ reqStories.keys().forEach(filename => {
   // get story's JavaScript and prepare a runner function
   const {default: storyJs} = reqStories(filename)
   const runJavaScript = () => {
+    // make sure javascript for a story doesn't run twice
+    if (storyJavaScriptRan === name) return
+
+    // run it!!
     storyJs()
 
-    // emit inited event
+    // tag as js ran & emit inited event
+    storyJavaScriptRan = name
     channel.emit('storybook/aether-accordion/inited')
   }
 
