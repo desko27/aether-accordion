@@ -148,11 +148,11 @@ describe('AetherAccordionController', () => {
         ...validArgs,
         activeId: targetId
       })
-      expect(aetherAccordion.getActive()).to.deep.equal(
-        new AetherItemController(
-          validArgs.entries.find(entry => entry.id === targetId)
-        )
+      const expected = new AetherItemController(
+        validArgs.entries.find(entry => entry.id === targetId)
       )
+      expected.activate()
+      expect(aetherAccordion.getActive()).to.deep.equal(expected)
     })
   })
 

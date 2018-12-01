@@ -39,6 +39,9 @@ export default class AetherAccordionController {
     this.activeId = activeId
     this.viewUpdaters = viewUpdaters
 
+    // actually mark the activeId entry as active if any
+    if (activeId !== null) this.getEntry(activeId).activate()
+
     // trigger init method which updates view
     this.init()
   }

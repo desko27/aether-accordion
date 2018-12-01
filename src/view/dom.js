@@ -16,14 +16,14 @@ export const getNodeQueries = node => {
 
 // template getters
 export const templates = {
-  getEntryTitleTemplate: ({id, title}) => `
-    <dt data-id="${id}">${title}</dt>
+  getEntryTitleTemplate: ({id, title, active}) => `
+    <dt data-id="${id}" ${active ? 'class="is-active"' : ''}>${title}</dt>
   `,
-  getEntryDescriptionTemplate: ({description}) => `
-    <dd>${description}</dd>
+  getEntryDescriptionTemplate: ({description, active}) => `
+    <dd style="max-height:${active ? 'none' : 0}">${description}</dd>
   `,
-  getEntryTemplate: ({id, title, description}) => `
-    ${templates.getEntryTitleTemplate({id, title})}
-    ${templates.getEntryDescriptionTemplate({description})}
+  getEntryTemplate: ({id, title, description, active}) => `
+    ${templates.getEntryTitleTemplate({id, title, active})}
+    ${templates.getEntryDescriptionTemplate({description, active})}
   `
 }
