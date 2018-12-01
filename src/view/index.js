@@ -88,7 +88,7 @@ const initAetherAccordion = ({element, entries = null, activeId = null}) => {
         // [transition-helper] #2) set max-height to 0
         setTimeout(() => {
           descriptionNode.style.maxHeight = 0
-        })
+        }, 20) // give some time for the transition to notice #1 maxHeight
       },
       insertEntryBefore: (controller, id, entry) => {
         getEntryNode(id).insertAdjacentHTML(
