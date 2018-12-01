@@ -19,8 +19,8 @@ export const templates = {
   getEntryTitleTemplate: ({id, title, active}) => `
     <dt data-id="${id}" ${active ? 'class="is-active"' : ''}>${title}</dt>
   `,
-  getEntryDescriptionTemplate: ({description, active}) => `
-    <dd style="max-height:${active ? 'none' : 0}">${description}</dd>
+  getEntryDescriptionTemplate: ({description}) => `
+    <dd>${description}</dd>
   `,
   getEntryTemplate: ({id, title, description, active}) => `
     ${templates.getEntryTitleTemplate({id, title, active})}
