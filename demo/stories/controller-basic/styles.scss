@@ -4,6 +4,8 @@ $button-background-color: #cccccc;
 $button-border-color: #999999;
 
 .story--actions {
+  display: flex;
+  flex-wrap: wrap;
   margin: 20px;
 
   button {
