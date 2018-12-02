@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
-    "build": "sui-bundler lib src/index.js -o umd/aether-accordion --umd=\"AetherAccordion\"",
+    "build": "sui-bundler lib src/index.js -o lib/aether-accordion --umd=\"AetherAccordion\"",
     "lint": "sui-lint js && sui-lint sass",
     "precommit": "sui-precommit run",
     "test": "npm run test:browser",
