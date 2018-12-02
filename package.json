@@ -13,7 +13,7 @@
     "test": "npm run test:browser",
     "test:browser": "sui-test browser",
     "test:server": "sui-test server",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text npm run test:server"
+    "coverage": "nyc --reporter=html --reporter=text npm run test:server"
   },
   "devDependencies": {
     "@s-ui/bundler": "^3.28.0",
@@ -31,7 +31,6 @@
     "babel-preset-sui": "^1.10.0",
     "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
-    "cross-env": "^5.2.0",
     "css-loader": "^1.0.1",
     "eslint-plugin-prettier": "^3.0.0",
     "highlight.js": "^9.13.1",
