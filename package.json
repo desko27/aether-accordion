@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
+    "build": "sui-bundler lib src/index.js -o umd/aether-accordion --umd=\"AetherAccordion\"",
     "lint": "sui-lint js && sui-lint sass",
     "precommit": "sui-precommit run",
     "test": "npm run test:browser",
@@ -15,6 +16,7 @@
     "coverage": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text npm run test:server"
   },
   "devDependencies": {
+    "@s-ui/bundler": "^3.28.0",
     "@s-ui/lint": "^2.20.0",
     "@s-ui/precommit": "^2.5.0",
     "@s-ui/test": "^1.14.0",

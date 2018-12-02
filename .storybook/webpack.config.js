@@ -12,6 +12,7 @@ module.exports = {
   },
   resolve: {
     alias: {
+      $root: path.resolve(__dirname, '../'),
       $lib: path.resolve(__dirname, '../src/')
     }
   }
