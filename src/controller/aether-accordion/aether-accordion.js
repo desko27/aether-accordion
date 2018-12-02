@@ -62,6 +62,7 @@ export default class AetherAccordionController {
     // settle other properties into the instance
     this.activeId = activeId
     this.viewUpdaters = viewUpdaters
+    this.eventListeners = {}
 
     // actually mark the activeId entry as active if any
     if (activeId !== null) this.getEntry(activeId).activate()
@@ -71,7 +72,7 @@ export default class AetherAccordionController {
   }
 
   /**
-   * Runs the specified viewUpdaters function only if exists
+   * Run the specified viewUpdaters function only if exists
    * @param {Function} funcName The name of the viewUpdaters function to run
    * @param {...Argument} args The arguments for the corresponding viewUpdaters
    *                           function
@@ -83,11 +84,69 @@ export default class AetherAccordionController {
   }
 
   /**
+   * Register a new event listener function for a specific eventName, so
+   * that function will fire whenever the specified eventName is fired.
+   * @param {String} eventName An identifier for the event
+   * @param {Function} func The function that's going to be triggered when the
+   *                        specified event is fired. The function takes an
+   *                        event object as an argument: event => {···}
+   * @memberof AetherAccordionController
+   * @throws {MissingArgumentError} Argument eventName must be set
+   * @throws {MissingArgumentError} Argument func must be set
+   * @throws {ArgumentTypeError} Argument eventName must be a string
+   * @throws {ArgumentTypeError} Argument func must be a function
+   */
+  on(eventName, func) {
+    if (eventName === undefined) throwMissingArgumentError('eventName')
+    if (func === undefined) throwMissingArgumentError('func')
+
+    if (typeof eventName !== 'string')
+      throwArgumentTypeError('eventName', eventName, 'string')
+    if (typeof func !== 'function')
+      throwArgumentTypeError('func', func, 'function')
+
+    if (!(eventName in this.eventListeners)) this.eventListeners[eventName] = []
+    this.eventListeners[eventName].push(func) // add the new listener
+  }
+
+  /**
+   * Trigger an event with the specific eventName, so any registered function
+   * for the specified eventName will be immediately fired.
+   * @param {String} eventName
+   * @param {Object} [event={}]
+   * @memberof AetherAccordionController
+   * @throws {MissingArgumentError} Argument eventName must be set
+   * @throws {MissingArgumentError} Argument event must be set
+   * @throws {ArgumentTypeError} Argument eventName must be a string
+   * @throws {ArgumentTypeError} Argument event must be an object
+   */
+  emitEvent(eventName, event = {}) {
+    if (eventName === undefined) throwMissingArgumentError('eventName')
+    if (event === undefined) throwMissingArgumentError('event')
+
+    if (typeof eventName !== 'string')
+      throwArgumentTypeError('eventName', eventName, 'string')
+    if (typeof event !== 'object' || event === null)
+      throwArgumentTypeError('event', event, 'object')
+
+    // add common stuff for all the event objects
+    const extendedEvent = {
+      source: this,
+      ...event
+    }
+
+    // run all the registered functions for this event!!
+    if (eventName in this.eventListeners)
+      this.eventListeners[eventName].forEach(f => f(extendedEvent))
+  }
+
+  /**
    * Initializing hook for first view rendering
    * @memberof AetherAccordionController
    */
   init() {
     this.updateView('init')
+    this.emitEvent('init')
   }
 
   /**
@@ -202,6 +261,7 @@ export default class AetherAccordionController {
 
     entry.setTitle(value)
     this.updateView('setEntryTitle', id, value)
+    this.emitEvent('setEntryTitle', {result: true})
     return true
   }
 
@@ -227,6 +287,7 @@ export default class AetherAccordionController {
 
     entry.setDescription(value)
     this.updateView('setEntryDescription', id, value)
+    this.emitEvent('setEntryDescription', {result: true})
     return true
   }
 
@@ -251,6 +312,7 @@ export default class AetherAccordionController {
     entry.activate()
     this.activeId = id
     this.updateView('activateEntry', id)
+    this.emitEvent('activateEntry', {result: true})
     return true
   }
 
@@ -270,6 +332,7 @@ export default class AetherAccordionController {
     entry.deactivate()
     this.activeId = null
     this.updateView('deactivateEntry', id)
+    this.emitEvent('deactivateEntry', {result: true})
     return true
   }
 
@@ -310,6 +373,7 @@ export default class AetherAccordionController {
 
     this.entries.splice(targetIndex, 0, newEntry)
     this.updateView('insertEntryBefore', id, entry)
+    this.emitEvent('insertEntryBefore', {result: newEntry.getId()})
     return newEntry.getId()
   }
 
@@ -350,6 +414,7 @@ export default class AetherAccordionController {
 
     this.entries.splice(targetIndex + 1, 0, newEntry)
     this.updateView('insertEntryAfter', id, entry)
+    this.emitEvent('insertEntryAfter', {result: newEntry.getId()})
     return newEntry.getId()
   }
 
@@ -409,6 +474,7 @@ export default class AetherAccordionController {
 
     if (this.entries.length === startingLength) return false
     this.updateView('removeEntry', id)
+    this.emitEvent('removeEntry', {result: true})
     return true
   }
 }
