@@ -96,6 +96,22 @@ describe('AetherAccordionController', () => {
       })
     })
 
+    describe('throws BadArgumentError when', () => {
+      it("'entries' argument has inconsistent occurrences of id", () => {
+        const {id, ...entryWithoutId} = validEntry
+        const inconsistentEntries = [...validArgs.entries, entryWithoutId]
+        expect(
+          () =>
+            new AetherAccordionController({
+              ...validArgs,
+              entries: inconsistentEntries
+            })
+        )
+          .to.throw()
+          .with.property('name', 'BadArgumentError')
+      })
+    })
+
     describe('throws ExistingIdError when', () => {
       it("'entries' argument receives duplicated ids", () => {
         const entries = [...validArgs.entries, {...validEntry, id: 1}]
