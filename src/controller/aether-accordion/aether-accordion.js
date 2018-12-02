@@ -41,8 +41,8 @@ export default class AetherAccordionController {
     // check for coherence in the presence of IDs
     // (all entries have it or none of them)
     if (
-      !entries.every(entry => typeof entry.id === 'number') &&
-      !entries.every(entry => entry.id === undefined)
+      !entries.every(entry => entry.id === undefined) &&
+      !entries.every(entry => entry.id !== undefined)
     )
       throwBadArgumentError(
         'entries',

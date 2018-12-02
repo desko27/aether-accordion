@@ -52,7 +52,7 @@ export const throwBadArgumentError = (argument, value, reason) => {
     `Argument '${argument}' with value '${value}' is invalid, ` +
     `the reason is '${reason}'.`
 
-  throw withType.call(new Error(message), 'ArgumentType')
+  throw withType.call(new Error(message), 'BadArgument')
 }
 
 /**
