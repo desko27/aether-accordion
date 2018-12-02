@@ -261,7 +261,7 @@ export default class AetherAccordionController {
 
     entry.setTitle(value)
     this.updateView('setEntryTitle', id, value)
-    this.emitEvent('setEntryTitle', {result: true})
+    this.emitEvent('setEntryTitle', {id, value, entry, result: true})
     return true
   }
 
@@ -287,7 +287,7 @@ export default class AetherAccordionController {
 
     entry.setDescription(value)
     this.updateView('setEntryDescription', id, value)
-    this.emitEvent('setEntryDescription', {result: true})
+    this.emitEvent('setEntryDescription', {id, value, entry, result: true})
     return true
   }
 
@@ -312,7 +312,7 @@ export default class AetherAccordionController {
     entry.activate()
     this.activeId = id
     this.updateView('activateEntry', id)
-    this.emitEvent('activateEntry', {result: true})
+    this.emitEvent('activateEntry', {id, entry, result: true})
     return true
   }
 
@@ -332,7 +332,7 @@ export default class AetherAccordionController {
     entry.deactivate()
     this.activeId = null
     this.updateView('deactivateEntry', id)
-    this.emitEvent('deactivateEntry', {result: true})
+    this.emitEvent('deactivateEntry', {id, entry, result: true})
     return true
   }
 
@@ -373,7 +373,11 @@ export default class AetherAccordionController {
 
     this.entries.splice(targetIndex, 0, newEntry)
     this.updateView('insertEntryBefore', id, entry)
-    this.emitEvent('insertEntryBefore', {result: newEntry.getId()})
+    this.emitEvent('insertEntryBefore', {
+      id,
+      entry: newEntry,
+      result: newEntry.getId()
+    })
     return newEntry.getId()
   }
 
@@ -414,7 +418,11 @@ export default class AetherAccordionController {
 
     this.entries.splice(targetIndex + 1, 0, newEntry)
     this.updateView('insertEntryAfter', id, entry)
-    this.emitEvent('insertEntryAfter', {result: newEntry.getId()})
+    this.emitEvent('insertEntryAfter', {
+      id,
+      entry: newEntry,
+      result: newEntry.getId()
+    })
     return newEntry.getId()
   }
 
@@ -474,7 +482,7 @@ export default class AetherAccordionController {
 
     if (this.entries.length === startingLength) return false
     this.updateView('removeEntry', id)
-    this.emitEvent('removeEntry', {result: true})
+    this.emitEvent('removeEntry', {id, result: true})
     return true
   }
 }
