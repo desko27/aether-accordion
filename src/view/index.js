@@ -6,19 +6,25 @@ import {templates, getNodeQueries} from './dom'
 const LIB_CLASS = 'aeacc-AetherAccordion'
 
 /**
- * AetherAccordionController view factory.
- *
- * @param element Selector string to target one or multiple elements, or a
- *                single HTMLElement.
- * @param entries Array of objects each of them representing an accordion
- *                entry. Each object needs the following properties: id, title
- *                description. See AetherAccordionController for more details.
- * @param activeId An entry ID which will be active from the beginning.
- *                 No entry will be active if this param is missing or null.
- *
- * @returns As many controller instances as needed in an array. If only one
- *          controller is needed, no array will be returned, but a single
- *          controller instance.
+ * AetherAccordionController view factory
+ * @param {Object} options
+ * @param {String|HTMLElement} options.element Selector string to target one
+ *  or multiple elements, or a single HTMLElement.
+ * @param {Array<Object>|null} [options.entries=null] Array of objects each of
+ *  them representing an accordion entry. Each object requires the following
+ *  properties: title, description. Optionally you can pass id to each one
+ *  too. See AetherAccordionController for more details.
+ * @param {Integer|null} [options.activeId=null] An entry ID which will be
+ *  active from the beginning. No entry will be active if this param is missing
+ *  or null.
+ * @returns {AetherAccordionController|Array<AetherAccordionController>}
+ *  As many controller instances as needed in an array. If only one
+ *  controller is needed, no array will be returned, but a single
+ *  controller instance.
+ * @throws {MissingArgumentError} Option element must be set
+ * @throws {ArgumentTypeError} Option element must be a string or HTMLElement
+ * @see AetherAccordionController
+ * @see AetherItemController
  */
 const initAetherAccordion = ({element, entries = null, activeId = null}) => {
   // check incoming options
