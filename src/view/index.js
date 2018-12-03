@@ -73,6 +73,12 @@ const initAetherAccordion = ({element, entries = null, activeId = null}) => {
         getEntryTitleNode(id).innerHTML = value
       },
       setEntryDescription: (controller, id, value) => {
+        // auto insert 'p' parent when raw text is presented (no parent tag)
+        const trimmedValue = value.trim()
+        if (!trimmedValue.startsWith('<') || !trimmedValue.endsWith('>')) {
+          controller.setEntryDescription(id, `<p>${trimmedValue}</p>`)
+          return // don't update now, this view updater is called again
+        }
         getEntryDescriptionNode(id).innerHTML = value
       },
       activateEntry: (controller, id) => {
