@@ -134,6 +134,51 @@ describe('AetherAccordionController', () => {
     })
   })
 
+  describe('has an updateView method that', () => {
+    it('runs the specified viewUpdaters function with arguments')
+    it('does not run the specified viewUpdaters function if it does not exit')
+  })
+
+  describe('has an on method that', () => {
+    it('registers a new event listener function for a specific eventName')
+    describe('throws MissingArgumentError when', () => {
+      it('eventName is missing')
+      it('func is missing')
+    })
+    describe('throws ArgumentTypeError when', () => {
+      it('eventName is invalid')
+      it('func is invalid')
+    })
+  })
+
+  describe('has an emitEvent method that', () => {
+    it('runs all the subscribed functions to the specified eventName')
+    it('has an event argument that defaults to an empty object if not set')
+    it('throws MissingArgumentError when eventName is missing')
+    describe('throws ArgumentTypeError when', () => {
+      it('eventName is invalid')
+      it('event is invalid')
+    })
+  })
+
+  describe('has an init method that', () => {
+    it('runs init view updater function')
+    it('emits init event')
+  })
+
+  describe('has an triggerEntryAjax method that', () => {
+    it('does nothing on a non-AJAX description')
+    it('resolves and sets a new value for an AJAX description')
+    it('emits init event')
+    it('throws MissingArgumentError when id is missing')
+    it('throws ArgumentTypeError when id is invalid')
+    it('returns false if the entry id is not found')
+  })
+
+  describe('has a getNewId method that', () => {
+    it('returns a new unique and valid id by checking existing ones')
+  })
+
   describe('has a getEntries method that', () => {
     it('returns the entries property', () => {
       expect(validAetherAccordion.getEntries()).to.deep.equals(

@@ -42,8 +42,8 @@ export default class AetherAccordionController {
     // check for coherence in the presence of IDs
     // (all entries have it or none of them)
     if (
-      !entries.every(entry => entry.id === undefined) &&
-      !entries.every(entry => entry.id !== undefined)
+      entries.some(entry => entry.id === undefined) &&
+      entries.some(entry => entry.id !== undefined)
     )
       throwBadArgumentError(
         'entries',
@@ -120,13 +120,11 @@ export default class AetherAccordionController {
    * @param {Object} [event={}]
    * @memberof AetherAccordionController
    * @throws {MissingArgumentError} Argument eventName must be set
-   * @throws {MissingArgumentError} Argument event must be set
    * @throws {ArgumentTypeError} Argument eventName must be a string
    * @throws {ArgumentTypeError} Argument event must be an object
    */
   emitEvent(eventName, event = {}) {
     if (eventName === undefined) throwMissingArgumentError('eventName')
-    if (event === undefined) throwMissingArgumentError('event')
 
     if (typeof eventName !== 'string')
       throwArgumentTypeError('eventName', eventName, 'string')

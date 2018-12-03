@@ -90,12 +90,11 @@ export default class AetherItemController {
   setTitle(value) {
     if (value === undefined) throwMissingArgumentError('value')
 
-    const type = typeof value
-    if (type !== 'string' && type !== 'function')
+    if (typeof value !== 'string' && typeof value !== 'function')
       throwArgumentTypeError('value', value, 'string or function')
 
     // direct assignment
-    if (type === 'string') {
+    if (typeof value === 'string') {
       validateTitle(value)
       this.title = value
     }
@@ -120,12 +119,11 @@ export default class AetherItemController {
   setDescription(value) {
     if (value === undefined) throwMissingArgumentError('value')
 
-    const type = typeof value
-    if (type !== 'string' && type !== 'function')
+    if (typeof value !== 'string' && typeof value !== 'function')
       throwArgumentTypeError('value', value, 'string or function')
 
     // direct assignment
-    if (type === 'string') {
+    if (typeof value === 'string') {
       validateDescription(value)
       this.description = value
     }

@@ -35,11 +35,6 @@ export const validateEntry = (entry, ItemController = AetherItemController) => {
  *                           unique id
  */
 export const validateEntries = entries => {
-  const expectedType = 'array of entries'
-
-  if (!Array.isArray(entries))
-    throwArgumentTypeError('entries', entries, expectedType)
-
   // check that all ids are unique
   entries.reduce((checks, entry) => {
     const {id} = entry
