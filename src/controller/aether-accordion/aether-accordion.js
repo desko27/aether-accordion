@@ -6,6 +6,7 @@ import {
 } from '../../utils/error'
 import {validateEntries, validateEntry} from './aether-accordion.validations'
 import {validateId} from '../aether-item/aether-item.validations'
+import {LOADING_SYMBOL, AJAX_SYMBOL} from '../../symbols'
 
 /**
  * The controller for an AetherAccordion. An instance of
@@ -69,6 +70,9 @@ export default class AetherAccordionController {
 
     // trigger init method which updates view
     this.init()
+
+    // trigger ajax of entries if needed
+    this.entries.map(({id}) => this.triggerEntryAjax(id))
   }
 
   /**
@@ -147,6 +151,34 @@ export default class AetherAccordionController {
   init() {
     this.updateView('init')
     this.emitEvent('init')
+  }
+
+  triggerEntryAjax(id) {
+    const entryDescription = this.getEntryDescription(id)
+    if (!entryDescription) return false
+
+    // check for ajax symbol
+    if (entryDescription.startsWith(AJAX_SYMBOL)) {
+      this.setEntryDescription(id, LOADING_SYMBOL)
+      const source = entryDescription.slice(AJAX_SYMBOL.length)
+
+      // enqueue the request in a non-blocking way
+      ;(async () => {
+        let result
+        try {
+          result = await (await window.fetch(source)).text()
+        } catch (error) {
+          this.setEntryDescription(
+            id,
+            'Error: AJAX content could not be loaded...'
+          )
+        }
+        this.setEntryDescription(id, result)
+      })()
+
+      // enqueued
+      return true
+    }
   }
 
   /**

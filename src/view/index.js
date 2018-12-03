@@ -1,7 +1,8 @@
 import {throwMissingArgumentError, throwArgumentTypeError} from '../utils/error'
 import AetherAccordionController from '../controller'
 
-import {templates, getNodeQueries} from './dom'
+import {LOADING_SYMBOL} from '../symbols'
+import {templates, getNodeQueries, loadingTemplate} from './dom'
 
 const LIB_CLASS = 'aeacc-AetherAccordion'
 
@@ -73,12 +74,19 @@ const initAetherAccordion = ({element, entries = null, activeId = null}) => {
         getEntryTitleNode(id).innerHTML = value
       },
       setEntryDescription: (controller, id, value) => {
+        if (value === LOADING_SYMBOL) {
+          controller.setEntryDescription(id, `<p>${loadingTemplate}</p>`)
+          return // don't update now, this view updater is called again
+        }
+
         // auto insert 'p' parent when raw text is presented (no parent tag)
         const trimmedValue = value.trim()
         if (!trimmedValue.startsWith('<') || !trimmedValue.endsWith('>')) {
           controller.setEntryDescription(id, `<p>${trimmedValue}</p>`)
           return // don't update now, this view updater is called again
         }
+
+        // update the actual view
         getEntryDescriptionNode(id).innerHTML = value
       },
       activateEntry: (controller, id) => {

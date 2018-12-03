@@ -1,3 +1,5 @@
+import loadingSvg from './loading.svg.js'
+
 // node queries getter
 export const getNodeQueries = node => {
   const queries = {
@@ -27,3 +29,6 @@ export const templates = {
     ${templates.getEntryDescriptionTemplate({description, active})}
   `
 }
+
+// extras
+export const loadingTemplate = `<img src="${loadingSvg}" />`
