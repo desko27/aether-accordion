@@ -337,6 +337,61 @@ export default class AetherAccordionController {
   }
 
   /**
+   * Insert a new entry before/after the specified index
+   * @param {Integer} index
+   * @param {Object} entry
+   * @param {String} position One of ['before', 'after']
+   * @param {Integer} [entry.id] A new one will be automatically generated if
+   *                             not set
+   * @param {String} entry.title
+   * @param {String} entry.description
+   * @returns {Integer|null} The id of the new entry if successfully inserted,
+   *                         null if the provided position and index are an
+   *                         impossible reference
+   * @memberof AetherAccordionController
+   * @throws {MissingArgumentError} Argument index must be set
+   * @throws {MissingArgumentError} Argument entry must be set
+   * @throws {MissingArgumentError} Argument position must be set
+   * @throws {ArgumentTypeError} Argument index must be a positive integer
+   * @throws {ArgumentTypeError} Argument entry must be a plain object with the
+   *                             required entry properties
+   * @throws {ArgumentTypeError} Argument position must be a string of
+   *                             ['before', 'after']
+   * @throws {ExistingIdError} If provided, entry.id should not exist already
+   */
+  insertEntryAt(index, entry, position = 'before') {
+    if (index === undefined) throwMissingArgumentError('index')
+    if (entry === undefined) throwMissingArgumentError('entry')
+    if (position === undefined) throwMissingArgumentError('position')
+
+    if (!Number.isInteger(index) || (Number.isInteger(index) && index < 0))
+      throwArgumentTypeError('index', index, 'positive integer')
+    if (typeof entry !== 'object' || entry === null)
+      throwArgumentTypeError('entry', entry, 'object')
+    if (typeof position !== 'string' || !['before', 'after'].includes(position))
+      throwArgumentTypeError('position', position, "one of ['before', 'after']")
+
+    if (entry.id === undefined) entry.id = this.getNewId()
+    const newEntry = validateEntry(entry)
+
+    if (this.entries.find(e => e.id === entry.id))
+      throwExistingIdError(entry.id)
+
+    const targetIndex = position === 'before' || index === 0 ? index : index + 1
+    if (index !== 0 && !this.entries[index]) return null
+
+    this.entries.splice(targetIndex, 0, newEntry)
+    this.updateView('insertEntryAt', index, entry)
+    this.emitEvent('insertEntryAt', {
+      index,
+      entry: newEntry,
+      position,
+      result: newEntry.getId()
+    })
+    return newEntry.getId()
+  }
+
+  /**
    * Insert a new entry before the specified entry id
    * @param {Integer} id
    * @param {Object} entry
@@ -357,28 +412,12 @@ export default class AetherAccordionController {
    */
   insertEntryBefore(id, entry) {
     if (id === undefined) throwMissingArgumentError('id')
-    if (entry === undefined) throwMissingArgumentError('entry')
-    if (typeof entry !== 'object' || entry === null)
-      throwArgumentTypeError('entry', entry, 'object')
     validateId(id)
-
-    if (entry.id === undefined) entry.id = this.getNewId()
-    const newEntry = validateEntry(entry)
-
-    if (this.entries.find(e => e.id === entry.id))
-      throwExistingIdError(entry.id)
 
     const targetIndex = this.entries.findIndex(e => e.id === id)
     if (targetIndex === -1) return null
 
-    this.entries.splice(targetIndex, 0, newEntry)
-    this.updateView('insertEntryBefore', id, entry)
-    this.emitEvent('insertEntryBefore', {
-      id,
-      entry: newEntry,
-      result: newEntry.getId()
-    })
-    return newEntry.getId()
+    return this.insertEntryAt(targetIndex, entry, 'before')
   }
 
   /**
@@ -402,28 +441,12 @@ export default class AetherAccordionController {
    */
   insertEntryAfter(id, entry) {
     if (id === undefined) throwMissingArgumentError('id')
-    if (entry === undefined) throwMissingArgumentError('entry')
-    if (typeof entry !== 'object' || entry === null)
-      throwArgumentTypeError('entry', entry, 'object')
     validateId(id)
-
-    if (entry.id === undefined) entry.id = this.getNewId()
-    const newEntry = validateEntry(entry)
-
-    if (this.entries.find(e => e.id === entry.id))
-      throwExistingIdError(entry.id)
 
     const targetIndex = this.entries.findIndex(e => e.id === id)
     if (targetIndex === -1) return null
 
-    this.entries.splice(targetIndex + 1, 0, newEntry)
-    this.updateView('insertEntryAfter', id, entry)
-    this.emitEvent('insertEntryAfter', {
-      id,
-      entry: newEntry,
-      result: newEntry.getId()
-    })
-    return newEntry.getId()
+    return this.insertEntryAt(targetIndex, entry, 'after')
   }
 
   /**
@@ -441,8 +464,7 @@ export default class AetherAccordionController {
    * @throws {ExistingIdError} If provided, entry.id should not exist already
    */
   prependEntry(entry) {
-    const {id: firstId} = this.entries[0]
-    return this.insertEntryBefore(firstId, entry)
+    return this.insertEntryAt(0, entry, 'before')
   }
 
   /**
@@ -460,8 +482,7 @@ export default class AetherAccordionController {
    * @throws {ExistingIdError} If provided, entry.id should not exist already
    */
   appendEntry(entry) {
-    const {id: lastId} = this.entries[this.entries.length - 1]
-    return this.insertEntryAfter(lastId, entry)
+    return this.insertEntryAt(this.entries.length - 1, entry, 'after')
   }
 
   /**
