@@ -153,6 +153,18 @@ export default class AetherAccordionController {
     this.emitEvent('init')
   }
 
+  /**
+   * Start a request in order to retrieve the data from the provided URL at
+   * the description (after 'ajax:' prefix, also AJAX_SYMBOL). This method
+   * does not wait for it to complete since it only triggers the promise, but
+   * it settles the retrieved description value whenever the promise is done.
+   * @param {Integer} id
+   * @returns true if AJAX request is successfully enqueued, false if the entry
+   *          id is not found
+   * @memberof AetherAccordionController
+   * @throws {MissingArgumentError} Argument id must be set
+   * @throws {ArgumentTypeError} Argument id must pass validation function
+   */
   triggerEntryAjax(id) {
     const entryDescription = this.getEntryDescription(id)
     if (!entryDescription) return false
