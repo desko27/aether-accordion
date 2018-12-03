@@ -9,9 +9,16 @@ export const getNodeQueries = node => {
       [...node.querySelectorAll(`dt[data-id="${id}"]`)].find(
         n => n.parentNode === node
       ),
+    getEntryNodeAt: index =>
+      [...node.querySelectorAll(`dt:nth-child(${1 + index * 2})`)].find(
+        n => n.parentNode === node
+      ),
     getEntryTitleNode: id => queries.getEntryNode(id),
+    getEntryTitleNodeAt: index => queries.getEntryNodeAt(index),
     getEntryDescriptionNode: id =>
-      queries.getEntryTitleNode(id).nextElementSibling
+      queries.getEntryTitleNode(id).nextElementSibling,
+    getEntryDescriptionNodeAt: index =>
+      queries.getEntryTitleNodeAt(index).nextElementSibling
   }
   return queries
 }

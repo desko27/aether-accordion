@@ -51,8 +51,10 @@ const initAetherAccordion = ({element, entries = null, activeId = null}) => {
     const {
       getAllEntryTitleDescriptionNodes,
       getEntryNode,
+      getEntryNodeAt,
       getEntryTitleNode,
-      getEntryDescriptionNode
+      getEntryDescriptionNode,
+      getEntryDescriptionNodeAt
     } = getNodeQueries(node)
     const {getEntryTemplate} = templates
 
@@ -110,17 +112,20 @@ const initAetherAccordion = ({element, entries = null, activeId = null}) => {
           descriptionNode.style.maxHeight = 0
         }, 20) // give some time for the transition to notice #1 maxHeight
       },
-      insertEntryBefore: (controller, id, entry) => {
-        getEntryNode(id).insertAdjacentHTML(
-          'beforebegin',
-          getEntryTemplate(entry)
-        )
-      },
-      insertEntryAfter: (controller, id, entry) => {
-        getEntryDescriptionNode(id).insertAdjacentHTML(
-          'afterend',
-          getEntryTemplate(entry)
-        )
+      insertEntryAt: (controller, index, entry, position) => {
+        if (index === 0 && node.childElementCount === 0) {
+          node.innerHTML = getEntryTemplate(entry)
+        } else if (position === 'before') {
+          getEntryNodeAt(index).insertAdjacentHTML(
+            'beforebegin',
+            getEntryTemplate(entry)
+          )
+        } else if (position === 'after') {
+          getEntryDescriptionNodeAt(index).insertAdjacentHTML(
+            'afterend',
+            getEntryTemplate(entry)
+          )
+        }
       },
       removeEntry: (controller, id) => {
         getEntryDescriptionNode(id).remove()

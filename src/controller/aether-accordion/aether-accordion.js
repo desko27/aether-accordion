@@ -413,7 +413,7 @@ export default class AetherAccordionController {
     if (index !== 0 && !this.entries[index]) return null
 
     this.entries.splice(targetIndex, 0, newEntry)
-    this.updateView('insertEntryAt', index, entry)
+    this.updateView('insertEntryAt', index, entry, position)
     this.emitEvent('insertEntryAt', {
       index,
       entry: newEntry,
@@ -514,7 +514,9 @@ export default class AetherAccordionController {
    * @throws {ExistingIdError} If provided, entry.id should not exist already
    */
   appendEntry(entry) {
-    return this.insertEntryAt(this.entries.length - 1, entry, 'after')
+    const {length} = this.entries
+    const targetIndex = length === 0 ? 0 : length - 1
+    return this.insertEntryAt(targetIndex, entry, 'after')
   }
 
   /**
