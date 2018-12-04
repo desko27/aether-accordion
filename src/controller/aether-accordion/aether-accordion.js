@@ -55,7 +55,7 @@ export default class AetherAccordionController {
     // validate entries and parse them into actual item controllers
     // ** add ID to each one if it's actually missing
     const entriesWithId = entries.map((entry, index) => {
-      if (entry.id === undefined) return {id: index, ...entry}
+      if (entry.id === undefined) return {...entry, id: index}
       return entry
     })
     this.entries = validateEntries(entriesWithId)
@@ -80,11 +80,15 @@ export default class AetherAccordionController {
    * @param {Function} funcName The name of the viewUpdaters function to run
    * @param {...Argument} args The arguments for the corresponding viewUpdaters
    *                           function
+   * @returns true if the view updater function is found and ran, false if not
    * @memberof AetherAccordionController
    */
   updateView(funcName, ...args) {
-    if (funcName in this.viewUpdaters)
+    if (funcName in this.viewUpdaters) {
       this.viewUpdaters[funcName](this, ...args)
+      return true
+    }
+    return false
   }
 
   /**
@@ -128,7 +132,7 @@ export default class AetherAccordionController {
 
     if (typeof eventName !== 'string')
       throwArgumentTypeError('eventName', eventName, 'string')
-    if (typeof event !== 'object' || event === null)
+    if (!(event instanceof Object))
       throwArgumentTypeError('event', event, 'object')
 
     // add common stuff for all the event objects
@@ -168,27 +172,27 @@ export default class AetherAccordionController {
     if (!entryDescription) return false
 
     // check for ajax symbol
-    if (entryDescription.startsWith(AJAX_SYMBOL)) {
-      this.setEntryDescription(id, LOADING_SYMBOL)
-      const source = entryDescription.slice(AJAX_SYMBOL.length)
+    if (!entryDescription.startsWith(AJAX_SYMBOL)) return false
 
-      // enqueue the request in a non-blocking way
-      ;(async () => {
-        let result
-        try {
-          result = await (await window.fetch(source)).text()
-        } catch (error) {
-          this.setEntryDescription(
-            id,
-            'Error: AJAX content could not be loaded...'
-          )
-        }
-        this.setEntryDescription(id, result)
-      })()
+    this.setEntryDescription(id, LOADING_SYMBOL)
+    const source = entryDescription.slice(AJAX_SYMBOL.length)
 
-      // enqueued
-      return true
-    }
+    // enqueue the request in a non-blocking way
+    ;(async () => {
+      let result
+      try {
+        result = await (await window.fetch(source)).text()
+      } catch (error) {
+        return this.setEntryDescription(
+          id,
+          'Error: AJAX content could not be loaded...'
+        )
+      }
+      return this.setEntryDescription(id, result)
+    })()
+
+    // enqueued
+    return true
   }
 
   /**
@@ -404,11 +408,10 @@ export default class AetherAccordionController {
   insertEntryAt(index, entry, position = 'before') {
     if (index === undefined) throwMissingArgumentError('index')
     if (entry === undefined) throwMissingArgumentError('entry')
-    if (position === undefined) throwMissingArgumentError('position')
 
     if (!Number.isInteger(index) || (Number.isInteger(index) && index < 0))
       throwArgumentTypeError('index', index, 'positive integer')
-    if (typeof entry !== 'object' || entry === null)
+    if (!(entry instanceof Object))
       throwArgumentTypeError('entry', entry, 'object')
     if (typeof position !== 'string' || !['before', 'after'].includes(position))
       throwArgumentTypeError('position', position, "one of ['before', 'after']")

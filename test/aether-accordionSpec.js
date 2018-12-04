@@ -2,6 +2,7 @@ import './globals'
 import AetherAccordionController from '../src/controller/aether-accordion'
 import AetherItemController from '../src/controller/aether-item'
 import {validateEntry} from '../src/controller/aether-accordion/aether-accordion.validations'
+import {AJAX_SYMBOL} from '../src/symbols'
 
 const validArgs = {
   entries: [
@@ -42,6 +43,18 @@ describe('AetherAccordionController', () => {
       it('entries', () => {
         expect(validAetherAccordion.entries).to.exist
         expect(validAetherAccordion.entries)
+          .to.be.an('array')
+          .that.deep.equals(
+            validArgs.entries.map(entry => new AetherItemController(entry))
+          )
+      })
+      it('entries without ids', () => {
+        aetherAccordion = new AetherAccordionController({
+          ...validArgs,
+          entries: validArgs.entries.map(entry => ({...entry, id: undefined}))
+        })
+        expect(aetherAccordion.entries).to.exist
+        expect(aetherAccordion.entries)
           .to.be.an('array')
           .that.deep.equals(
             validArgs.entries.map(entry => new AetherItemController(entry))
@@ -135,48 +148,234 @@ describe('AetherAccordionController', () => {
   })
 
   describe('has an updateView method that', () => {
-    it('runs the specified viewUpdaters function with arguments')
-    it('does not run the specified viewUpdaters function if it does not exit')
+    it('runs the specified viewUpdaters function with arguments', () => {
+      let viewUpdaterIsDone, controllerResult, arg1Result, arg2Result
+      const aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        viewUpdaters: {
+          myViewUpdater: (controller, arg1, arg2) => {
+            viewUpdaterIsDone = true
+            controllerResult = controller
+            arg1Result = arg1
+            arg2Result = arg2
+          }
+        }
+      })
+      const itRan = aetherAccordion.updateView(
+        'myViewUpdater',
+        'first one',
+        'second one'
+      )
+      expect(itRan).to.be.true
+      expect(viewUpdaterIsDone).to.be.true
+      expect(controllerResult).to.deep.equal(aetherAccordion)
+      expect(arg1Result).to.equal('first one')
+      expect(arg2Result).to.equal('second one')
+    })
+    it('does not run the specified viewUpdaters function if missing', () => {
+      const aetherAccordion = new AetherAccordionController(validArgs)
+      const itRan = aetherAccordion.updateView('undefinedViewUpdater')
+      expect(itRan).to.be.false
+    })
   })
 
   describe('has an on method that', () => {
-    it('registers a new event listener function for a specific eventName')
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs)
+    })
+
     describe('throws MissingArgumentError when', () => {
-      it('eventName is missing')
-      it('func is missing')
+      it('eventName is missing', () => {
+        expect(() => aetherAccordion.on())
+          .to.throw()
+          .with.property('name', 'MissingArgumentError')
+      })
+      it('func is missing', () => {
+        expect(() => aetherAccordion.on('deactivateEntry'))
+          .to.throw()
+          .with.property('name', 'MissingArgumentError')
+      })
     })
     describe('throws ArgumentTypeError when', () => {
-      it('eventName is invalid')
-      it('func is invalid')
+      it('eventName is invalid', () => {
+        expect(() => aetherAccordion.on(15, () => {}))
+          .to.throw()
+          .with.property('name', 'ArgumentTypeError')
+      })
+      it('func is invalid', () => {
+        expect(() => aetherAccordion.on('deactivateEntry', 'invalid func'))
+          .to.throw()
+          .with.property('name', 'ArgumentTypeError')
+      })
+    })
+    it('registers multiple functions for a specific eventName', () => {
+      expect(aetherAccordion.eventListeners).to.deep.equal({})
+      aetherAccordion.on('activateEntry', () => {})
+      aetherAccordion.on('activateEntry', () => {})
+      expect(aetherAccordion.eventListeners).to.have.property('activateEntry')
+      expect(aetherAccordion.eventListeners.activateEntry).to.have.lengthOf(2)
+      expect(typeof aetherAccordion.eventListeners.activateEntry[0]).to.equal(
+        'function'
+      )
+      expect(typeof aetherAccordion.eventListeners.activateEntry[1]).to.equal(
+        'function'
+      )
     })
   })
 
   describe('has an emitEvent method that', () => {
-    it('runs all the subscribed functions to the specified eventName')
-    it('has an event argument that defaults to an empty object if not set')
-    it('throws MissingArgumentError when eventName is missing')
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs)
+    })
+
+    it('throws MissingArgumentError when eventName is missing', () => {
+      expect(() => aetherAccordion.emitEvent())
+        .to.throw()
+        .with.property('name', 'MissingArgumentError')
+    })
     describe('throws ArgumentTypeError when', () => {
-      it('eventName is invalid')
-      it('event is invalid')
+      it('eventName is invalid', () => {
+        expect(() => aetherAccordion.emitEvent(15, {}))
+          .to.throw()
+          .with.property('name', 'ArgumentTypeError')
+      })
+      it('event is invalid', () => {
+        ;['not an object', null].forEach(value => {
+          expect(() => aetherAccordion.emitEvent('activateEntry', value))
+            .to.throw()
+            .with.property('name', 'ArgumentTypeError')
+        })
+      })
+    })
+    it('runs all the subscribed functions to the specified eventName', () => {
+      let firstRan, secondRan
+      aetherAccordion.on('activateEntry', () => (firstRan = true))
+      aetherAccordion.on('activateEntry', () => (secondRan = true))
+      aetherAccordion.emitEvent('activateEntry')
+      expect(firstRan).to.be.true
+      expect(secondRan).to.be.true
+    })
+    it('has an event argument that defaults to an empty object if not set', () => {
+      let passedEvent
+      aetherAccordion.on('activateEntry', event => (passedEvent = event))
+      aetherAccordion.emitEvent('activateEntry')
+      expect(typeof passedEvent).not.to.be.null
+      expect(typeof passedEvent).to.equal('object')
     })
   })
 
   describe('has an init method that', () => {
-    it('runs init view updater function')
-    it('emits init event')
+    it('runs init view updater function at constructor', () => {
+      let itRan
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        viewUpdaters: {
+          init: () => (itRan = true)
+        }
+      })
+      expect(itRan).to.be.true
+    })
+    it('emits init event', () => {
+      let itRan
+      aetherAccordion = new AetherAccordionController(validArgs)
+      aetherAccordion.on('init', () => (itRan = true))
+      aetherAccordion.init()
+      expect(itRan).to.be.true
+    })
   })
 
   describe('has an triggerEntryAjax method that', () => {
-    it('does nothing on a non-AJAX description')
-    it('resolves and sets a new value for an AJAX description')
-    it('emits init event')
-    it('throws MissingArgumentError when id is missing')
-    it('throws ArgumentTypeError when id is invalid')
-    it('returns false if the entry id is not found')
+    let clock
+
+    before(() => {
+      // mock fetch
+      const fakeFetch = () =>
+        Promise.resolve({
+          text: () => Promise.resolve('test data')
+        })
+      if (typeof window === 'undefined') global.window = {fetch: fakeFetch}
+      else sinon.replace(window, 'fetch', fakeFetch)
+
+      // use sinon clock
+      clock = sinon.useFakeTimers()
+    })
+    after(() => {
+      sinon.restore()
+      clock.restore()
+    })
+
+    it('throws MissingArgumentError when id is missing', () => {
+      expect(() => validAetherAccordion.triggerEntryAjax())
+        .to.throw()
+        .with.property('name', 'MissingArgumentError')
+    })
+    it('throws ArgumentTypeError when id is invalid', () => {
+      expect(() => validAetherAccordion.triggerEntryAjax('invalid id'))
+        .to.throw()
+        .with.property('name', 'ArgumentTypeError')
+    })
+    it('does nothing on a non-existing description', () => {
+      aetherAccordion = new AetherAccordionController(validArgs)
+      expect(aetherAccordion.triggerEntryAjax(10)).to.be.false
+    })
+    it('does nothing on a non-AJAX description', () => {
+      aetherAccordion = new AetherAccordionController(validArgs)
+      expect(aetherAccordion.triggerEntryAjax(0)).to.be.false
+    })
+    it('resolves and sets a new value for an AJAX description', () => {
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        entries: [
+          {
+            ...validEntry,
+            id: 0,
+            description: `${AJAX_SYMBOL}http://example.com`
+          }
+        ]
+      })
+
+      // wait for the job queue (resolved promises) to process
+      setTimeout(() => {
+        expect(aetherAccordion.getEntryDescription(0)).to.equal('test data')
+      })
+    })
+    it('sets an error message as a description when AJAX fails', () => {
+      // mock fetch as an error thrower
+      window.fetch = () => {
+        throw new Error('This is an error')
+      }
+
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        entries: [
+          {
+            ...validEntry,
+            id: 0,
+            description: `${AJAX_SYMBOL}http://example.com`
+          }
+        ]
+      })
+
+      // wait for the job queue (resolved promises) to process
+      setTimeout(() => {
+        expect(aetherAccordion.getEntryDescription(0).startsWith('Error:')).to
+          .be.true
+      })
+    })
   })
 
   describe('has a getNewId method that', () => {
-    it('returns a new unique and valid id by checking existing ones')
+    it('returns a new unique and valid id by checking existing ones', () => {
+      aetherAccordion = new AetherAccordionController(validArgs)
+      expect(aetherAccordion.getNewId()).to.equal(3)
+    })
+    it('returns the lowest possible new unique id', () => {
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        entries: [...validArgs.entries, {...validEntry, id: 4}]
+      })
+      expect(aetherAccordion.getNewId()).to.equal(3)
+    })
   })
 
   describe('has a getEntries method that', () => {
@@ -433,6 +632,22 @@ describe('AetherAccordionController', () => {
         aetherAccordion.entries.find(entry => entry.id === targetId).active
       ).to.be.true
     })
+    it('automatically deactivates an already active entry if any', () => {
+      const alreadyActiveId = 0
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        activeId: alreadyActiveId
+      })
+      const targetId = 1
+      aetherAccordion.activateEntry(targetId)
+      expect(
+        aetherAccordion.entries.find(entry => entry.id === alreadyActiveId)
+          .active
+      ).to.be.false
+      expect(
+        aetherAccordion.entries.find(entry => entry.id === targetId).active
+      ).to.be.true
+    })
   })
 
   describe('has a deactivateEntry method that', () => {
@@ -463,6 +678,99 @@ describe('AetherAccordionController', () => {
       expect(
         aetherAccordion.entries.find(entry => entry.id === targetId).active
       ).to.be.false
+    })
+  })
+
+  describe('has an insertEntryAt method that', () => {
+    beforeEach(() => {
+      aetherAccordion = new AetherAccordionController(validArgs)
+    })
+
+    describe('throws MissingArgumentError when', () => {
+      it('all arguments are missing', () => {
+        expect(() => aetherAccordion.insertEntryAt())
+          .to.throw()
+          .with.property('name', 'MissingArgumentError')
+      })
+      it('second argument is missing', () => {
+        expect(() => aetherAccordion.insertEntryAt(0))
+          .to.throw()
+          .with.property('name', 'MissingArgumentError')
+      })
+    })
+
+    describe('throws ArgumentTypeError when', () => {
+      it("'index' argument receives invalid values", () => {
+        const invalidValues = ['not a number', -1, -253, true, null, [], {}]
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.insertEntryAt(value, validEntry))
+            .to.throw()
+            .with.property('name', 'ArgumentTypeError')
+        })
+      })
+      it("'entry' argument receives invalid values", () => {
+        const {title, ...entryWithoutTitle} = validEntry
+        const {description, ...entryWithoutDescription} = validEntry
+        const invalidValues = [
+          'a string',
+          12,
+          -253,
+          true,
+          false,
+          null,
+          {},
+          entryWithoutTitle,
+          entryWithoutDescription,
+          {...validEntry, id: 'invalid id'}
+        ]
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.insertEntryAt(0, value))
+            .to.throw()
+            .with.property('name', 'ArgumentTypeError')
+        })
+      })
+      it("'position' argument receives invalid values", () => {
+        const invalidValues = [{}, [], 15, 'invalid string']
+        invalidValues.forEach(value => {
+          expect(() => aetherAccordion.insertEntryAt(0, validEntry, value))
+            .to.throw()
+            .with.property('name', 'ArgumentTypeError')
+        })
+      })
+    })
+
+    describe('throws ExistingIdError when', () => {
+      it("'entry' argument receives an existing id", () => {
+        expect(() => aetherAccordion.insertEntryAt(0, {...validEntry, id: 1}))
+          .to.throw()
+          .with.property('name', 'ExistingIdError')
+      })
+    })
+
+    it('returns null if entry cannot be inserted at the provided index', () =>
+      expect(aetherAccordion.insertEntryAt(15, validEntry)).to.be.null)
+    it('returns the new id if index is valid and entries are successfully updated', () =>
+      expect(aetherAccordion.insertEntryAt(0, validEntry)).to.equal(3))
+    it('returns a generated id even if entry was not provided with it', () =>
+      expect(
+        aetherAccordion.insertEntryAt(0, {...validEntry, id: undefined})
+      ).to.equal(3))
+
+    it('inserts an entry into entries array before the specified index', () => {
+      const targetIndex = 1
+      aetherAccordion.insertEntryAt(targetIndex, validEntry, 'before')
+
+      expect(aetherAccordion.entries[targetIndex]).to.deep.equal(
+        new AetherItemController(validEntry)
+      )
+    })
+    it('inserts an entry into entries array after the specified index', () => {
+      const targetIndex = 1
+      aetherAccordion.insertEntryAt(targetIndex, validEntry, 'after')
+
+      expect(aetherAccordion.entries[targetIndex + 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      )
     })
   })
 
@@ -691,6 +999,19 @@ describe('AetherAccordionController', () => {
 
       expect(targetIndex + 1).to.equal(aetherAccordion.entries.length - 1)
       expect(aetherAccordion.entries[targetIndex + 1]).to.deep.equal(
+        new AetherItemController(validEntry)
+      )
+    })
+
+    it('inserts an entry into entries array even when entries is empty', () => {
+      aetherAccordion = new AetherAccordionController({
+        ...validArgs,
+        entries: []
+      })
+      aetherAccordion.appendEntry(validEntry)
+
+      expect(0).to.equal(aetherAccordion.entries.length - 1)
+      expect(aetherAccordion.entries[0]).to.deep.equal(
         new AetherItemController(validEntry)
       )
     })
