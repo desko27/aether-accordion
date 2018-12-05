@@ -120,7 +120,7 @@ reqStories.keys().forEach(filename => {
       )
       .replace(
         '((sass))',
-        `~~~scss\n${sass.replace('$lib', 'aether-accordion')}\n~~~`
+        `~~~scss\n${sass.replace('$lib', 'aether-accordion/src')}\n~~~`
       )
 
   // add some collected stuff to the story object in order to make it available
