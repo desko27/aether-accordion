@@ -1,4 +1,4 @@
-# aether-accordion
+# aether-accordion [![Build Status](https://travis-ci.org/desko27/aether-accordion.svg?branch=master)](https://travis-ci.org/desko27/aether-accordion) [![Coverage Status](https://coveralls.io/repos/github/desko27/aether-accordion/badge.svg?branch=master)](https://coveralls.io/github/desko27/aether-accordion?branch=master)
 
 > An easy-to-use, performant, full tested and configurable accordion UI component written in Vanilla JS.
 
