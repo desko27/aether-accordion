@@ -2,7 +2,7 @@
   "name": "aether-accordion",
   "version": "1.0.0",
   "main": "src/index.js",
-  "repository": "https://gitlab.com/desko27/aether-accordion.git",
+  "repository": "https://github.com/desko27/aether-accordion.git",
   "author": "desko27 <desko27@gmail.com>",
   "license": "MIT",
   "scripts": {
