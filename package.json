@@ -1,6 +1,6 @@
 {
   "name": "aether-accordion",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "style": "lib/style.css",
   "repository": "https://github.com/desko27/aether-accordion.git",
