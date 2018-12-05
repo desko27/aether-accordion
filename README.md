@@ -27,7 +27,12 @@ npm install aether-accordion --save
 
 ## Quick start
 
-Here is the basic implementation. For more advanced use cases refer to the linked Storybook at the beginning of this file.
+You should import styles the way it suits you the most from the right location:
+
+- Minified CSS: `aether-accordion/lib/style.css`
+- Source SASS: `aether-accordion/src/style.scss`
+
+Then, run the init function in JavaScript:
 
 ```js
 import initAetherAccordion from 'aether-accordion'
@@ -51,6 +56,8 @@ initAetherAccordion({ element: 'dl' })
   </dd>
 </dl>
 ```
+
+For more advanced use cases refer to [the Storybook](https://desko27.github.io/aether-accordion).
 
 ---
 
