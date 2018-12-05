@@ -13,7 +13,9 @@
     "test": "npm run test:browser",
     "test:browser": "sui-test browser",
     "test:server": "sui-test server",
-    "coverage": "nyc --reporter=html --reporter=text npm run test:server"
+    "coverage": "nyc --reporter=html --reporter=text npm run test:server",
+    "build-storybook": "build-storybook -c .storybook",
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "devDependencies": {
     "@s-ui/bundler": "^3.28.0",
@@ -24,6 +26,7 @@
     "@storybook/addons": "^4.0.6",
     "@storybook/core-events": "^4.0.6",
     "@storybook/html": "^4.0.6",
+    "@storybook/storybook-deployer": "^2.8.1",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.5",
