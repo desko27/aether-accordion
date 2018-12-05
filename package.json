@@ -14,6 +14,7 @@
     "test:browser": "sui-test browser",
     "test:server": "sui-test server",
     "coverage": "nyc --reporter=html --reporter=text npm run test:server",
+    "ci:coveralls": "nyc report --reporter=text-lcov | coveralls",
     "build-storybook": "build-storybook -c .storybook",
     "deploy-storybook": "storybook-to-ghpages"
   },
@@ -34,6 +35,7 @@
     "babel-preset-sui": "^1.10.0",
     "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
     "css-loader": "^1.0.1",
     "eslint-plugin-prettier": "^3.0.0",
     "highlight.js": "^9.13.1",
