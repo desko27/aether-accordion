@@ -2,7 +2,7 @@
 
 > An easy-to-use, performant, full tested and configurable accordion UI component written in Vanilla JS.
 
-## [Check the Storybook ↗]()
+## [Check the Storybook ↗](https://desko27.github.io/aether-accordion)
 
 All the use cases are demonstrated and documented at the Storybook. Also, each example is provided with the source code so you can understand how to use it yourself.
 
